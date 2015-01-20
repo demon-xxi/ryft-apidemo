@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org">
+    <head>
+        <title>Ryft Demo</title>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+        <meta charset="utf-8">
+        <script src="file-browser/jquery.js" type="text/javascript"></script>
+        <script src="file-browser/jquery.easing.js" type="text/javascript"></script>
+        <script src="file-browser/jqueryFileTree.js" type="text/javascript"></script>
+        <link href="file-browser/jqueryFileTree.css" rel="stylesheet" type="text/css" media="screen" />
+        <style>
+html {
+    height: 100%;
+}
+
+body {
+    background-color: #ffffff;
+    color: #000000;
+    
+    font-family: "Arial","Helvetica","Verdana","sans-serif";
+    line-height: 1.8em;
+    font-size: 12px;
+}
+
+.browser {
+    width: 200px;
+    height: 250px;
+    border-top: solid 1px #BBB;
+    border-left: solid 1px #BBB;
+    border-bottom: solid 1px #FFF;
+    border-right: solid 1px #FFF;
+    background: #FFF;
+    overflow: scroll;
+    padding: 5px;
+    float: left;
+}
+        </style>
+        <script type="text/javascript">
+            $(document).ready( function() {
+                $('#input').fileTree(
+                    {
+                        root: '/',
+                        script: '/api/file',
+                        folderEvent: 'click',
+                        expandSpeed: 750,
+                        collapseSpeed: 750,
+                        multiFolder: false
+                    }, function(file) {
+                    	$('#files').append(file + ', ');
+                    }
+                );
+                $('#function').change(function() {
+                    $("#function option:selected").each(function() {
+                        switch($(this).text()) {
+                        case "search":
+                        	$('#search').show();
+                            $('#fuzzy').hide();
+                            $('#sort').hide();
+                            $('#termFrequency').hide();
+                        	break;
+                        case "fuzzy search":
+                            $('#search').show();
+                            $('#fuzzy').show();
+                            $('#sort').hide();
+                            $('#termFrequency').hide();
+                            break;
+                        case "sort":
+                            $('#sort').show();
+                            $('#search').hide();
+                            $('#fuzzy').hide();
+                            $('#termFrequency').hide();
+                            break;
+                        case "term frequency":
+                            $('#termFrequency').show();
+                            $('#search').hide();
+                            $('#fuzzy').hide();
+                            $('#sort').hide();
+                            break;
+                        }
+                    });
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <form action="/api/demo" method="POST">
+	        <div>
+		        Input file(s)<br />
+		        <div id="input" class="browser"></div>
+		        <textarea name="files" id="files" readonly class="browser"></textarea>
+	        </div>
+            <div>
+                Number of nodes: <input type="text" name="nodes" value="1" />
+            </div>
+	        <div>
+		        Function:
+		        <select name="function" id="function">
+		            <option>search</option>
+		            <option>fuzzy search</option>
+		            <option>sort</option>
+		            <option>term frequency</option>
+		        </select>
+	        </div>
+	        
+	        <div id="search" style="display: block">
+	            Query string: <textarea name="query"></textarea><br />
+	            Surrounding width: <input type="text" name="width" value="0" />
+	            <div id="fuzzy" style="display: none">
+	            Fuzziness: <input type="text" name="fuzziness" value="0" />
+	            </div>
+	        </div>
+	        <div id="termFrequency" style="display: none">
+	            Input format: <input type="text" name="format" />
+	        </div>
+	        <div id="sort" style="display: none">
+	            Field: <input type="text" name="field" /><br />
+	            Order: <select name="sort">
+	                <option>ascending</option>
+	                <option>descending</option>
+	            </select>
+	        </div>
+            <input type="submit" />
+        </form>
+    </body>
+</html>

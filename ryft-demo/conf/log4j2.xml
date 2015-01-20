@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration>
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d %-5p [%t] [%X{lc_id}] %c - %m%n" />
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="com.metasys" additivity="false" level="trace">
+            <AppenderRef ref="console" level="trace" />
+        </Logger>
+
+        <Root level="warn">
+            <AppenderRef ref="console" />
+        </Root>
+    </Loggers>
+
+</Configuration>

@@ -1,0 +1,13 @@
+/target
+/.settings
+/.project
+/.classpath
+/*/target
+/*/.settings
+/*/.project
+/*/.classpath
+/*/*.log
+/*/Debug
+*.dll
+*.o
+/*/.cproject
