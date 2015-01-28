@@ -1,0 +1,25 @@
+<p>The term frequency function computes the term frequency on a set of input data. The output is a list of term/frequency pairs, with one pair for each unique term in the input.</p> 
+<pre>( input_specifier relational_operator expression )</pre>
+<p>The possible values for the format are:</p>
+<table>
+    <tr>
+        <th>Value</th>
+        <th>Description</th>
+        <th>Output</th>
+    </tr>
+    <tr>
+        <td>RAW_TEXT</td>
+        <td>The input is a sequence of raw bytes with no implicit formatting or grouping</td>
+        <td>The output is a list of terms and their respective frequency within the input</td>
+    </tr>
+    <tr>
+        <td>RECORD</td>
+        <td>The input is a series of records. Search the entire record</td>
+        <td>The output is a list of terms and their respective frequency <b>within each record</b> of the input. Each record is analyzed separately</td>
+    </tr>
+    <tr>
+        <td>RECORD.&lt;field_name&gt;</td>
+        <td>The input is a series of records. Search only the field called &lt;field_name&gt;</td>
+        <td>The output is a list of terms and their respective frequency <b>within the specified field</b> of each record of the input. Only the specified field of the record is analyzed, and all other fields are ignored. Each record is analyzed separately</td>
+    </tr>
+</table>

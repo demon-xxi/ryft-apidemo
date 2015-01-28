@@ -1,0 +1,11 @@
+<p>A search operation can output a set of files: an index file and a data file.</p>
+<ul>
+    <li>The index file contains one set of data describing each match, with the set of data containing at least the offset of the match, length of the match, and match distance.</li>
+    <li>The data file includes the actual match data, in the same format as the input.</li>
+</ul>
+One, or both files, can be produced and written to disk. 
+Running a sort or term frequency operation results in a different results format than the search operation:
+<ul>
+    <li>A sort operation will produce a single data file containing the sorted data records in the same format as the input.</li>
+    <li>A term frequency operation will produce a single output file containing the frequency of each term in the input.</li>
+</ul>

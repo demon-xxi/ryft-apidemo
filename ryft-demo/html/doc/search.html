@@ -1,0 +1,74 @@
+<p>The search function requires a query string parameter to specify how the search should be performed. A search criteria is made up of one or more relational expressions, connected using logical operations. A relational expression takes the following form:</p> 
+<pre>( input_specifier relational_operator expression )</pre>
+<p><em>input_specifier</em> specifies how the input data is arranged. The possible values are:</p>
+<table>
+    <tr>
+        <th>Value</th>
+        <th>Description</th>
+    </tr>
+    <tr>
+        <td>RAW_TEXT</td>
+        <td>The input is a sequence of raw bytes with no implicit formatting or grouping</td>
+    </tr>
+    <tr>
+        <td>RECORD</td>
+        <td>The input is a series of records. Search the entire record</td>
+    </tr>
+    <tr>
+        <td>RECORD.&lt;field_name&gt;</td>
+        <td>The input is a series of records. Search only the field called &lt;field_name&gt;</td>
+    </tr>
+</table>
+<p><em>relational_operator</em> specifies how the input relates to the expression. The possible values are:</p>
+<table>
+    <tr>
+        <th>Value</th>
+        <th>Description</th>
+    </tr>
+    <tr>
+        <td>EQUALS</td>
+        <td>The input must match expression exactly, with no additional leading or trailing data</td>
+    </tr>
+    <tr>
+        <td>NOT_EQUALS</td>
+        <td>The input must be anything other than expression</td>
+    </tr>
+    <tr>
+        <td>CONTAINS</td>
+        <td>The input must contain expression, and may contain additional leading or trailing data</td>
+    </tr>
+    <tr>
+        <td>DOES_NOT_CONTAIN</td>
+        <td>The input must not contain expression</td>
+    </tr>
+</table>
+<p><em>expression specifies</em> the expression to be matched. The possible values are:</p>
+<table>
+    <tr>
+        <th>Value</th>
+        <th>Description</th>
+    </tr>
+    <tr>
+        <td>A quoted string</td>
+        <td>Any valid C language string, including escaped characters. 
+<br/>For example, “match this text\n”</td>
+    </tr>
+    <tr>
+        <td>A HEX value</td>
+        <td>Any value, expressed as a sequence of 2-character upper case hexadecimal, up to a maximum length of TBD. No leading ‘0x’ or trailing ‘h’ is required.
+<br/>For example, 0A1B2C</td>
+    </tr>
+    <tr>
+        <td>A Wildcard</td>
+        <td>A ‘?’ character used to denote “any single character will match”. A ‘?’ can be inserted at any point(s) between quoted strings.
+<br/>For example, “match th”?”s text\n”</td>
+    </tr>
+    <tr>
+        <td>Any combination of the above</td>
+        <td>For example, “match th”?”s string”0D</td>
+    </tr>
+</table>
+<p>Multiple relational_expressions can be combined using the logical operators AND, OR, and XOR. These logical operators behave in the same manner as they do in the C language. For example: </p>
+<pre>( record.city EQUALS "Rockville" ) AND ( record.state EQUALS "MD" )</pre>
+<p>Parentheses can also be used to control the precedence of operations. For example: </p>
+<pre>( ( record.city EQUALS "Rockville" ) OR ( record.city EQUALS "Gaithersburg" ) )<br />AND ( record.state EQUALS "MD" )</pre>

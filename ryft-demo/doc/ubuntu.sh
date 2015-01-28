@@ -8,6 +8,8 @@ sudo update-alternatives --install "/usr/bin/java" "java" "/usr/lib/jvm/jdk1.8.0
 sudo cat >>/etc/bash.bashrc<<EOF
 
 export JAVA_HOME=/usr/lib/jvm/jdk1.8.0_25
-export PATH=${PATH}:/usr/lib/jvm/jdk1.8.0_25/bin
+export PATH=\${PATH}:/usr/lib/jvm/jdk1.8.0_25/bin
 EOF
 rm -f jdk-8u25-linux-x64.tar.gz
+
+javac com/metasys/ryft/Wrapper.java;java -Djava.library.path=.:/usr/lib/x86_64-linux-gnu com.metasys.ryft.Wrapper

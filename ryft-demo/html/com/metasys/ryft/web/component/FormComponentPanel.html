@@ -1,0 +1,83 @@
+<html xmlns:wicket>
+    <wicket:head>
+        <style>
+.formComponent {
+    float: left;
+    padding: 0px 0px 0px 0px;
+    width: 100%;
+}
+
+.formField {
+    float: left;
+    height: auto;
+    padding: 10px 0px 0px 0px;
+}
+
+.formInput {
+    border-radius: 4px;
+    border:1px solid #c5c5c5;
+    outline: none;
+    width: 200px;
+}
+.formInput:focus { 
+    border:1px solid #bcb4b0;
+    outline: none;
+    box-shadow: 0 0 3px 0 #bcb4b0;
+}
+
+.formMessage {
+    color: #f36851;
+    clear: both;
+    float: left;
+    font-size: 10pt;
+}
+
+.formError {
+    /* important to override any background color the component may already have */
+    background-color: #ffe0d9 !important;
+}
+
+.required {
+    color: #ff0000;
+    font-weight: bold;
+    font-size: 8pt;
+}
+
+input[type="text"], input[type="password"], input[type="file"] {
+    height: 22px;
+}
+select {
+    height: 26px;
+}
+select[multiple="multiple"] {
+    height: auto;
+}
+textarea.formInput {
+    width: auto;
+    height: auto;
+}
+        </style>
+    </wicket:head>
+	<wicket:panel>
+        <div class="formComponent">
+            <div wicket:id="field" class="formField"></div>
+            <div class="formMessage" wicket:id="feedback">error message</div>
+        </div>
+        
+        <wicket:fragment wicket:id="input">
+            <input wicket:id="fragment" class="formInput" type="text" />
+        </wicket:fragment>
+        <wicket:fragment wicket:id="hidden">
+            <input wicket:id="fragment" class="formInput" type="hidden" />
+        </wicket:fragment>
+        <wicket:fragment wicket:id="text">
+            <textarea wicket:id="fragment" rows="3" cols="25" class="formInput"></textarea>
+        </wicket:fragment>
+        <wicket:fragment wicket:id="span">
+            <span wicket:id="fragment"></span>
+        </wicket:fragment>
+        <wicket:fragment wicket:id="checkbox">
+            <input wicket:id="fragment" type="checkbox" />
+        </wicket:fragment>
+    </wicket:panel>
+</html>

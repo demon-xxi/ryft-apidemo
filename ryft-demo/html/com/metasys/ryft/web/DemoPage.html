@@ -1,125 +1,155 @@
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
     <head>
-        <title>Ryft Demo</title>
-        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+        <title>Ryft demo</title>
         <meta charset="utf-8">
-        <script src="file-browser/jquery.js" type="text/javascript"></script>
+        <script src="js/ryft-demo.js" type="text/javascript"></script>
+        <link href="css/ryft-demo.css" rel="stylesheet" type="text/css" media="screen"/>
+        <!-- Server-side file browser -->
         <script src="file-browser/jquery.easing.js" type="text/javascript"></script>
         <script src="file-browser/jqueryFileTree.js" type="text/javascript"></script>
         <link href="file-browser/jqueryFileTree.css" rel="stylesheet" type="text/css" media="screen" />
-        <style>
-html {
-    height: 100%;
-}
-
-body {
-    background-color: #ffffff;
-    color: #000000;
-    
-    font-family: "Arial","Helvetica","Verdana","sans-serif";
-    line-height: 1.8em;
-    font-size: 12px;
-}
-
-.browser {
-    width: 200px;
-    height: 250px;
-    border-top: solid 1px #BBB;
-    border-left: solid 1px #BBB;
-    border-bottom: solid 1px #FFF;
-    border-right: solid 1px #FFF;
-    background: #FFF;
-    overflow: scroll;
-    padding: 5px;
-    float: left;
-}
-        </style>
-        <script type="text/javascript">
-            $(document).ready( function() {
-                $('#input').fileTree(
-                    {
-                        root: '/',
-                        script: '/api/file',
-                        folderEvent: 'click',
-                        expandSpeed: 750,
-                        collapseSpeed: 750,
-                        multiFolder: false
-                    }, function(file) {
-                    	$('#files').append(file + ', ');
-                    }
-                );
-                $('#function').change(function() {
-                    $("#function option:selected").each(function() {
-                        switch($(this).text()) {
-                        case "search":
-                        	$('#search').show();
-                            $('#fuzzy').hide();
-                            $('#sort').hide();
-                            $('#termFrequency').hide();
-                        	break;
-                        case "fuzzy search":
-                            $('#search').show();
-                            $('#fuzzy').show();
-                            $('#sort').hide();
-                            $('#termFrequency').hide();
-                            break;
-                        case "sort":
-                            $('#sort').show();
-                            $('#search').hide();
-                            $('#fuzzy').hide();
-                            $('#termFrequency').hide();
-                            break;
-                        case "term frequency":
-                            $('#termFrequency').show();
-                            $('#search').hide();
-                            $('#fuzzy').hide();
-                            $('#sort').hide();
-                            break;
-                        }
-                    });
-                });
-            });
-        </script>
     </head>
     <body>
-        <form action="/api/demo" method="POST">
-	        <div>
-		        Input file(s)<br />
-		        <div id="input" class="browser"></div>
-		        <textarea name="files" id="files" readonly class="browser"></textarea>
-	        </div>
-            <div>
-                Number of nodes: <input type="text" name="nodes" value="1" />
+        <div class="header">
+            <img class="title" src="img/ryft_logo.png" /><span class="title">Actionable Intelligence from complex data</span>
+            <br style="clear: both" />
+        </div>
+        <div class="content">
+            <div wicket:id="debug" style="z-index:9999;top:60px;position:fixed"></div> 
+            <div id="ajaxIndicator" class="ajaxFeedback" style="display: none;">
+                <div class="indicator-content">Please wait... <img src="img/loading.gif" width="16" height="16" alt="loading" /></div>
             </div>
-	        <div>
-		        Function:
-		        <select name="function" id="function">
-		            <option>search</option>
-		            <option>fuzzy search</option>
-		            <option>sort</option>
-		            <option>term frequency</option>
-		        </select>
-	        </div>
-	        
-	        <div id="search" style="display: block">
-	            Query string: <textarea name="query"></textarea><br />
-	            Surrounding width: <input type="text" name="width" value="0" />
-	            <div id="fuzzy" style="display: none">
-	            Fuzziness: <input type="text" name="fuzziness" value="0" />
-	            </div>
-	        </div>
-	        <div id="termFrequency" style="display: none">
-	            Input format: <input type="text" name="format" />
-	        </div>
-	        <div id="sort" style="display: none">
-	            Field: <input type="text" name="field" /><br />
-	            Order: <select name="sort">
-	                <option>ascending</option>
-	                <option>descending</option>
-	            </select>
-	        </div>
-            <input type="submit" />
-        </form>
+            <br style="clear: both" />
+            <span wicket:id="feedbackPanel"></span>
+            <br style="clear: both" />
+            
+            <div class="left-menu">
+                <nav>
+                    <ul>
+                        <li class="top">Define</li>
+                        <li>
+	                        <ul>
+	                            <li class="item" id="dataset-menu"><a href="javascript:show('dataset')">Dataset</a></li>
+	                            <li class="item" id="output-menu"><a href="javascript:show('output')">Output File</a></li>
+	                            <li class="item" id="settings-menu"><a href="javascript:show('settings')">Settings</a></li>
+	                        </ul>
+                        </li>
+                        <li class="top">Analytics</li>
+                        <li>
+	                        <ul>
+	                            <li class="item" id="search-menu"><a href="javascript:show('search')">Search</a></li>
+	                            <li class="item" id="fuzzy-menu"><a href="javascript:show('fuzzy')">Fuzzy Search</a></li>
+	                            <li class="item" id="term-menu"><a href="javascript:show('term')">Term Frequency</a></li>
+	                            <li class="item" id="sort-menu"><a href="javascript:show('sort')">Sort</a></li>
+	                            <li class="item more">And more...</li>
+	                        </ul>
+	                    </li>
+                    </ul>
+                </nav>
+            </div>
+            
+            <form wicket:id="ryft-demo-form">
+                <input type="hidden" id="currentPanel" wicket:id="currentPanel" />
+                <input type="hidden" id="newPanel" wicket:id="newPanel" />
+                <div class="panel" id="dataset">
+                    <div class="panel-title">Please select location of your Input Dataset</div>
+                    <div id="input" wicket:id="input">Wicket-managed input field</div>
+                    <br />
+                    <div>Select the files to add to the Input Dataset</div>
+                    <div id="input-dataset" class="browser"></div>
+                    <div class="selection">
+                        <span>Selected files</span>
+                        <ul id="inputSelection"></ul>
+                    </div>
+                    <br style="clear: both" /><br />
+                    <div class="submit">
+	                    <input type="button" value="Clear All" onclick="javascript:clearInput()" />
+                    </div>
+                    <br style="clear: both" /><br />
+                    <div wicket:id="inputDoc">Wicket-managed input doc</div>
+                </div>
+                <div class="panel" id="output">
+                    <div class="panel-title">Please select location of your Output File</div>
+                    <div wicket:id="output"></div>
+                    <div wicket:id="writeIndex"></div>
+                    <br style="clear: both" /><br />
+                    <div wicket:id="outputDoc">Wicket-managed output doc</div>
+                </div>
+                <div class="panel" id="settings">
+                    <div class="panel-title">Please configure your Ryft One Settings here</div>
+                    <div wicket:id="nodes"></div>
+                    <br style="clear: both" /><br />
+                    <div wicket:id="settingsDoc">Wicket-managed settings doc</div>
+                </div>
+                <div class="panel" id="search">
+                    <div class="panel-title">Search</div>
+                    <div wicket:id="searchQuery"></div>
+                    <div wicket:id="searchWidth"></div>
+                    <br style="clear: both" /><br />
+                    <div class="submit">
+                        <input type="submit" value="execute" wicket:id="searchExecute" />
+                    </div>
+                    <br />
+                    <div wicket:id="searchResult">
+                        Result
+                    </div>
+                    <br style="clear: both" /><br />
+                    <div wicket:id="searchDoc">Wicket-managed search doc</div>
+                </div>
+                <div class="panel" id="fuzzy">
+                    <div class="panel-title">Fuzzy Search</div>
+                    <div wicket:id="fuzzyQuery"></div>
+                    <div wicket:id="fuzzyWidth"></div>
+                    <div wicket:id="fuzziness"></div>
+                    <br style="clear: both" /><br />
+                    <div class="submit">
+                        <input type="submit" value="execute" wicket:id="fuzzyExecute" />
+                    </div>
+                    <br />
+                    <div wicket:id="fuzzyResult">
+                        Result
+                    </div>
+                    <br style="clear: both" /><br />
+                    <div wicket:id="fuzzyDoc">Wicket-managed fuzzy doc</div>
+                </div>
+                <div class="panel" id="term">
+                    <div class="panel-title">Term Frequency</div>
+                    <div wicket:id="termField"></div>
+                    <div wicket:id="termFormat"></div>
+                    <br style="clear: both" /><br />
+                    <div class="submit">
+                        <input type="submit" value="execute" wicket:id="termExecute" />
+                    </div>
+                    <br />
+                    <div wicket:id="termResult">
+                        Result
+                    </div>
+                    <br style="clear: both" /><br />
+                    <div wicket:id="termDoc">Wicket-managed term doc</div>
+                </div>
+                <div class="panel" id="sort">
+                    <div class="panel-title">Sort</div>
+                    <div wicket:id="sortField"></div>
+                    <div wicket:id="sortOrder"></div>
+                    <br style="clear: both" /><br />
+                    <div class="submit">
+                        <input type="submit" value="execute" wicket:id="sortExecute" />
+                    </div>
+                    <br />
+                    <div wicket:id="sortResult">
+                        Result
+                    </div>
+                    <br style="clear: both" /><br />
+                    <div wicket:id="sortDoc">Wicket-managed sort doc</div>
+                </div>
+            </form>
+            
+            <br /><br />
+        </div>
+        <div class="footer">
+            &copy; <span wicket:id="year">2015</span> Ryft Systems, Inc.
+        </div>
     </body>
 </html>
+

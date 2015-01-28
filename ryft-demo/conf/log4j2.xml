@@ -2,7 +2,7 @@
 <Configuration>
     <Appenders>
         <Console name="console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d %-5p [%t] [%X{lc_id}] %c - %m%n" />
+            <PatternLayout pattern="%d %-5p [%t] [%X{query-id}] %c - %m%n" />
         </Console>
     </Appenders>
 

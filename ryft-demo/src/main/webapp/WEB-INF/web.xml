@@ -21,7 +21,7 @@
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
-    <!-- Setup Spring dispatch servlet for /admin only -->
+    <!-- Setup Spring dispatch servlet to expose the APIs -->
     <servlet>
         <servlet-name>single-entry-point</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -35,6 +35,7 @@
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
+    <!-- Expose the APIs under /api -->
     <servlet-mapping>
         <servlet-name>single-entry-point</servlet-name>
         <url-pattern>/api/*</url-pattern>
@@ -50,10 +51,12 @@
         </init-param>
         <init-param>
             <param-name>applicationBean</param-name>
+            <!-- Matches the Spring's bean name of the Wicket Entry point -->
             <param-value>wicketApplication</param-value>
         </init-param>
     </filter>
 
+    <!-- Expose the Wicket UI under /demo -->
     <filter-mapping>
         <filter-name>wicket</filter-name>
         <url-pattern>/demo/*</url-pattern>
