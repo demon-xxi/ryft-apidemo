@@ -4,7 +4,7 @@ This project is a Web Interface and REST API to demonstrate the capabilities of 
 
 Install git:
 
-    sudo yum install git
+    sudo apt-get install git
 
 Install Java:
 
@@ -42,6 +42,26 @@ Start the server:
     java -cp 'conf:lib/*' com.metasys.ryft.DemoApplication
 
 Open a browser on port 8989 of your server. 
+
+### Configuration
+
+The ryft.properties contains details on each property to configure. There are at least 2 values that should be updated:
+* ryft.fs.root for the root of the Ryft file system where input and output files are
+* ryft.workingDir for the working directories where C program will be generated
+
+### Logs
+
+The logs contain by default the Query ID so one can easily figure out what happened and replicate the issue by manually executing commands in the working directory.
+The query ID is used as the working directory where the C program is generated and compiled (under ryft.workingDir). If the program fails to compile or execute, one can check the C program generated (main.c) or try to re-issue the compilation commands:
+
+    /usr/bin/gcc -Wextra -g -Wall -L/usr/lib/x86_64-linux-gnu/ -c -o main.o main.c
+    /usr/bin/gcc main.o -o ryft_demo -lryftone
+    
+Or execute the program
+
+    ./ryft_demo
+    
+Or check the standard output and error logs of the command (stdout.log and stderr.log).
 
 
 ## Making calls to the REST API
@@ -202,6 +222,11 @@ The page contains a form with all the input fields, some of which have custom va
 
 The Wicket interface relies on the API to execute a Ryft query, and the API relies on the ProgramManager class (com.metasys.ryft.program.ProgramManager) to actually execute the query against the Ryft box.
 The ProgramManager generates a C program based on the parameters of the query, compiles it, then execute it. When the program is done, it can read back a log file with the standard output of the C program to extract the statistics, or any error message. 
+
+Each call is assigned an ID by the API, which is used as the name of the working directory. The working directory will contain the following files after a successful execution:
+* main.c the generated C program
+* main.o and ryft_demo the product of the compilation
+* stdout.log and stderr.log, respectively containing the standard output and error of the commands executed
 
 ### Packaging and Maven
 
