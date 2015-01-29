@@ -203,6 +203,11 @@ The page contains a form with all the input fields, some of which have custom va
 The Wicket interface relies on the API to execute a Ryft query, and the API relies on the ProgramManager class (com.metasys.ryft.program.ProgramManager) to actually execute the query against the Ryft box.
 The ProgramManager generates a C program based on the parameters of the query, compiles it, then execute it. When the program is done, it can read back a log file with the standard output of the C program to extract the statistics, or any error message. 
 
+Each call is assigned an ID by the API, which is used as the name of the working directory. The working directory will contain the following files after a successful execution:
+* main.c the generated C program
+* main.o and ryft_demo the product of the compilation
+* stdout.log and stderr.log, respectively containing the standard output and error of the commands executed
+
 ### Packaging and Maven
 
 All the dependencies are manages with Maven. On top of Spring, Wicket and Jetty the project also relies on 
