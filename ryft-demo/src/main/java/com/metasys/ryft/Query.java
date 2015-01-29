@@ -66,13 +66,11 @@ public class Query implements Serializable {
                 if (searchQuery == null || searchWidth == null) {
                     throw new RyftException("Both the query string and surrounding width must be specified for a search query");
                 }
-                searchQuery = checkSearchExpression(searchQuery);
                 break;
             case FUZZY:
                 if (fuzzyQuery == null || fuzzyWidth == null || fuzziness == null) {
                     throw new RyftException("The query string, surrounding width and fuzziness must be specified for a search query");
                 }
-                fuzzyQuery = checkSearchExpression(fuzzyQuery);
                 break;
             case TERM:
                 if (termField == null || termFormat == null) {
@@ -87,13 +85,6 @@ public class Query implements Serializable {
             default:
                 throw new RyftException("Unknown query type");
         }
-    }
-
-    private String checkSearchExpression(String search) {
-        if (search.contains(RAW) || search.contains(RECORD)) {
-            return search;
-        }
-        return '(' + RAW + " CONTAINS \"" + search + "\")";
     }
 
     public String getId() {

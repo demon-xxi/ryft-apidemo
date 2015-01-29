@@ -69,29 +69,6 @@ public class QueryTest {
         }
         query.setSearchWidth(2);
         query.validate();
-        Assert.assertEquals("(RAW_TEXT CONTAINS \"query\")", query.getSearchQuery());
-    }
-
-    @Test
-    public void testValidateRawSearch() throws RyftException {
-        Query query = new Query();
-        query.setType("search");
-        query.setInput("input");
-        query.setSearchQuery("RAW_TEXT search");
-        query.setSearchWidth(2);
-        query.validate();
-        Assert.assertEquals("RAW_TEXT search", query.getSearchQuery());
-    }
-
-    @Test
-    public void testValidateRecordSearch() throws RyftException {
-        Query query = new Query();
-        query.setType("search");
-        query.setInput("input");
-        query.setSearchQuery("RECORD search");
-        query.setSearchWidth(2);
-        query.validate();
-        Assert.assertEquals("RECORD search", query.getSearchQuery());
     }
 
     @Test
@@ -121,7 +98,6 @@ public class QueryTest {
         }
         query.setFuzziness(3);
         query.validate();
-        Assert.assertEquals("(RAW_TEXT CONTAINS \"query\")", query.getFuzzyQuery());
     }
 
     @Test

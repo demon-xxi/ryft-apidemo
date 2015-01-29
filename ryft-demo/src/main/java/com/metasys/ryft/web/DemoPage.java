@@ -90,7 +90,7 @@ public class DemoPage extends WebPage implements IAjaxIndicatorAware {
 
     // CSS to load for jQuery and Kendo
     private static final String[] KENDO_CSS = new String[] { "css/smoothness/jquery-ui.min.css", "css/kendo/kendo.common.min.css",
-            "css/kendo/kendo.default.min.css" };
+    "css/kendo/kendo.default.min.css" };
 
     // Holder of feedback keys already rendered to avoid duplicated messages for form components having their own embedded error messages
     public static final MetaDataKey<Boolean> IGNORE_FEEDBACK = new MetaDataKey<Boolean>() {

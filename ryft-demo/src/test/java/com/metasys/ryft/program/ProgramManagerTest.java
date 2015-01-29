@@ -86,6 +86,20 @@ public class ProgramManagerTest {
     }
 
     @Test
+    public void testGenerateSearchNoIdentifier() throws Exception {
+        query.setSearchQuery("something");
+        generateProgram(Query.SEARCH);
+    }
+
+    @Test
+    public void testGenerateSearchRecord() throws Exception {
+        query.setType(Query.SEARCH);
+        query.setSearchQuery("RECORD something");
+        pm.generate(query, "search_record");
+        assertProgram("search_record");
+    }
+
+    @Test
     public void testGenerateSearchNoIndex() throws Exception {
         query.setType(Query.SEARCH);
         query.setWriteIndex(false);
@@ -103,6 +117,12 @@ public class ProgramManagerTest {
 
     @Test
     public void testGenerateFuzzySearch() throws Exception {
+        generateProgram(Query.FUZZY);
+    }
+
+    @Test
+    public void testGenerateFuzzySearchNoIdentifier() throws Exception {
+        query.setFuzzyQuery("something");
         generateProgram(Query.FUZZY);
     }
 

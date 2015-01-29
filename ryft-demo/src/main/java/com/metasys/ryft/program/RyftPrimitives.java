@@ -77,11 +77,11 @@ public final class RyftPrimitives {
     }
 
     protected static void search(ProgramWriter program, String searchString, int width) throws RyftException {
-        wrapPrimitive(program, "rol_search_exact(&output, &input, \"" + escape(searchString) + "\", " + width + ")");
+        wrapPrimitive(program, "rol_search_exact(&output, &input, \"" + checkSearchExpression(searchString) + "\", " + width + ")");
     }
 
     protected static void fuzzySearch(ProgramWriter program, String searchString, int width, int fuzziness) throws RyftException {
-        wrapPrimitive(program, "rol_search_fuzzy(&output, &input, \"" + escape(searchString) + "\", " + width + ", " + fuzziness + ")");
+        wrapPrimitive(program, "rol_search_fuzzy(&output, &input, \"" + checkSearchExpression(searchString) + "\", " + width + ", " + fuzziness + ")");
     }
 
     protected static void sort(ProgramWriter program, String field, SortOrder order) throws RyftException {
@@ -125,6 +125,13 @@ public final class RyftPrimitives {
         program.append("printf(\"" + ERROR_PREFIX + "%s:\\n\", rol_get_error_string());", 2);
         program.append("return ret_val;", 2);
         program.append("}", 1);
+    }
+
+    private static String checkSearchExpression(String search) {
+        if (search.contains(Query.RAW) || search.contains(Query.RECORD)) {
+            return escape(search);
+        }
+        return escape('(' + Query.RAW + " CONTAINS \"" + search + "\")");
     }
 
     private static String escape(String value) {
