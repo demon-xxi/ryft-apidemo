@@ -4,7 +4,7 @@ This project is a Web Interface and REST API to demonstrate the capabilities of 
 
 Install git:
 
-    sudo yum install git
+    sudo apt-get install git
 
 Install Java:
 
