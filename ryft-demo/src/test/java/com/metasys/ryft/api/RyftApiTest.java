@@ -42,6 +42,7 @@ public class RyftApiTest {
         id = "demo_1234567890000_" + query.hashCode();
         api = new RyftApi();
         api.setProgramManager(pm);
+        api.setRyftFsRoot("target/mock");
         queryResult = new Result();
     }
 

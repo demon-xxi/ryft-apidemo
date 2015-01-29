@@ -11,7 +11,8 @@
 
     <context:component-scan base-package="com.metasys.ryft" />
     <context:property-placeholder location="classpath*:*.properties" local-override="false" />
-    <mvc:annotation-driven><mvc:message-converters>
+    <mvc:annotation-driven>
+        <mvc:message-converters>
             <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />
         </mvc:message-converters>
     </mvc:annotation-driven>

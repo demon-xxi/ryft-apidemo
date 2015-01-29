@@ -71,9 +71,9 @@ public class RyftApi {
                 throw RyftException.EXECUTE_PROGRAM;
             }
         }
-        result.setOutputFile(query.getOutput());
+        result.setOutputFile(FileBrowserApi.EXPECTED_ROOT + query.getOutput());
         if (query.isWriteIndex() && (Query.SEARCH.equals(query.getType()) || Query.FUZZY.equals(query.getType()))) {
-            result.setIndexFile(ProgramManager.INDEX_PREFIX + query.getOutput());
+            result.setIndexFile(FileBrowserApi.EXPECTED_ROOT + ProgramManager.INDEX_PREFIX + query.getOutput());
         }
         LOG.debug("Result: {}", result);
         return result;

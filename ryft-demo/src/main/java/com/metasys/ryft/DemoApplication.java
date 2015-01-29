@@ -62,6 +62,7 @@ public class DemoApplication extends WebApplication {
         int port = 0;
         if (args.length == 0) {
             port = 8989;
+            // try to figure out where the webapp folder is if not provided
             String[] options = new String[] { "src/main/webapp", ".", "webapp" };
             for (String option : options) {
                 if (new File(option + "/WEB-INF/web.xml").exists()) {

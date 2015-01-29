@@ -36,12 +36,13 @@ public class FileBrowserApi {
 
     private static final Logger LOG = LogManager.getLogger(FileBrowserApi.class);
 
-    // Root shown to the user
-    private static final String EXPECTED_ROOT = "/";
     // HTML file entry format with 3 parameters: CSS class, file path, file name
     private static final String LI_FORMAT = "<li class=\"%s\"><a href=\"#\" rel=\"%s\">%s</a></li>";
     private static final String DIRECTORY_CSS = "directory collapsed";
     private static final String FILE_CSS = "file ext_";
+
+    // Root shown to the user
+    public static final String EXPECTED_ROOT = "/";
 
     // Configured root folder where to start listing entries from
     @Value("${ryft.fs.root}")
