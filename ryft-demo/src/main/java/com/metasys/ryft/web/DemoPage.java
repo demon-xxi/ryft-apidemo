@@ -106,6 +106,12 @@ public class DemoPage extends WebPage implements IAjaxIndicatorAware {
     public DemoPage() throws Exception {
         super();
         query = new Query();
+        query.setInput("passengers.txt");
+        query.setSearchQuery("(RAW_TEXT CONTAINS (\"310-555-2323\"))");
+        query.setSearchWidth(21);
+        query.setFuzzyQuery("(RAW_TEXT CONTAINS \"Mr. Thomas Magnum\")");
+        query.setFuzzyWidth(25);
+        query.setFuzziness(2);
         addCommonComponents();
         addSettings();
         addSearch();
