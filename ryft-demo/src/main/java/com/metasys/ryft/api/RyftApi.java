@@ -76,6 +76,7 @@ public class RyftApi {
             result.setIndexFile(FileBrowserApi.EXPECTED_ROOT + ProgramManager.INDEX_PREFIX + query.getOutput());
         }
         LOG.debug("Result: {}", result);
+        ThreadContext.remove("query-id");
         return result;
     }
 
