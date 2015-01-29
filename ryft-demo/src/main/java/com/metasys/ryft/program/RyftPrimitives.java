@@ -50,7 +50,9 @@ public final class RyftPrimitives {
     }
 
     protected static void initProgram(ProgramWriter program) throws RyftException {
+        program.append("#define __STDC_FORMAT_MACROS");
         program.append("#include <stdio.h>");
+        program.append("#include <inttypes.h>");
         program.append("#include <time.h>");
         program.append("#include <libryftone.h>").newLine();
         program.append("int main(__attribute__ ((unused))int argc, __attribute__ ((unused))char* argv[]) {");
