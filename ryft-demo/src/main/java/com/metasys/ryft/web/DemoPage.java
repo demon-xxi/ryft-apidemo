@@ -2,7 +2,6 @@ package com.metasys.ryft.web;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.Calendar;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.wicket.MetaDataKey;
@@ -51,7 +50,6 @@ public class DemoPage extends WebPage implements IAjaxIndicatorAware {
     private static final String DEBUG_ID = "debug";
     private static final String AJAX_INDICATOR_ID = "ajaxIndicator";
     private static final String FEEDBACK_PANEL_ID = "feedbackPanel";
-    private static final String YEAR_ID = "year";
 
     // settings
     private static final String INPUT = "input";
@@ -143,7 +141,6 @@ public class DemoPage extends WebPage implements IAjaxIndicatorAware {
         feedbackPanel = new FeedbackPanel(FEEDBACK_PANEL_ID);
         feedbackPanel.setOutputMarkupId(true);
         add(feedbackPanel);
-        add(new Label(YEAR_ID, Calendar.getInstance().get(Calendar.YEAR)));
         form = new DemoForm(config.getPanel());
         add(form);
     }
@@ -232,7 +229,7 @@ public class DemoPage extends WebPage implements IAjaxIndicatorAware {
         // load the content of the panel's documentation from the HTML files under doc
         StringWriter writer = new StringWriter();
         IOUtils.copy(Thread.currentThread().getContextClassLoader().getResourceAsStream("doc/" + id + ".html"), writer);
-        form.add(new DocumentationPanel(id + DOC_SUFFIX, writer.toString()).setEscapeModelStrings(false));
+        add(new DocumentationPanel(id + DOC_SUFFIX, writer.toString()).setEscapeModelStrings(false));
     }
 
     private void addResult(String id) {
