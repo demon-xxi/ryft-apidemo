@@ -8,6 +8,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.feedback.FeedbackMessages;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.HiddenField;
@@ -42,10 +43,12 @@ public class FormComponentPanel extends Panel {
     private static final String HIDDEN_FRAGMENT = "hidden";
     private static final String SPAN_FRAGMENT = "span";
     private static final String CHECKBOX_FRAGMENT = "checkbox";
+    private static final String CHECKBOX_LABEL_ID = "cb-label";
 
     // Name of attributes to add to the form component
     private static final String PLACEHOLDER_ATTRIBUTE = "placeholder";
     private static final String TOOLTIP_ATTRIBUTE = "title";
+    private static final String LABEL_FOR_ATTRIBUTE = "for";
 
     private FormComponent<?> formComponent;
     private String name;
@@ -85,10 +88,12 @@ public class FormComponentPanel extends Panel {
         formComponent.add(new AttributeModifier(TOOLTIP_ATTRIBUTE, new StringResourceModel(id + ".tooltip", container, null, id)));
 
         String fragmentName = SPAN_FRAGMENT;
+        Label label = null;
         if (formComponent instanceof TextArea) {
             fragmentName = TEXT_FRAGMENT;
         } else if (formComponent instanceof CheckBox) {
             fragmentName = CHECKBOX_FRAGMENT;
+            label = new Label(CHECKBOX_LABEL_ID, name);
         } else if (formComponent instanceof HiddenField) {
             fragmentName = HIDDEN_FRAGMENT;
         } else if (formComponent instanceof TextField) {
@@ -98,6 +103,12 @@ public class FormComponentPanel extends Panel {
         Fragment fragment = new Fragment(FIELD_ID, fragmentName, this);
         fragment.add(formComponent);
         add(fragment);
+
+        if (label != null) {
+            formComponent.setOutputMarkupId(true);
+            fragment.add(label);
+            label.add(new AttributeModifier(LABEL_FOR_ATTRIBUTE, formComponent.getMarkupId()));
+        }
 
         add(new ComponentFeedback(this));
     }
