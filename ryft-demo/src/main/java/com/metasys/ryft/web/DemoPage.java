@@ -29,7 +29,6 @@ import com.metasys.ryft.Query;
 import com.metasys.ryft.Query.SortOrder;
 import com.metasys.ryft.Result;
 import com.metasys.ryft.web.component.DemoForm;
-import com.metasys.ryft.web.component.DocumentationPanel;
 import com.metasys.ryft.web.component.ExecuteButton;
 import com.metasys.ryft.web.component.FormComponentPanel;
 import com.metasys.ryft.web.component.ResultPanel;
@@ -88,7 +87,7 @@ public class DemoPage extends WebPage implements IAjaxIndicatorAware {
 
     // CSS to load for jQuery and Kendo
     private static final String[] KENDO_CSS = new String[] { "css/smoothness/jquery-ui.min.css", "css/kendo/kendo.common.min.css",
-    "css/kendo/kendo.default.min.css" };
+            "css/kendo/kendo.default.min.css" };
 
     // Holder of feedback keys already rendered to avoid duplicated messages for form components having their own embedded error messages
     public static final MetaDataKey<Boolean> IGNORE_FEEDBACK = new MetaDataKey<Boolean>() {
@@ -229,7 +228,7 @@ public class DemoPage extends WebPage implements IAjaxIndicatorAware {
         // load the content of the panel's documentation from the HTML files under doc
         StringWriter writer = new StringWriter();
         IOUtils.copy(Thread.currentThread().getContextClassLoader().getResourceAsStream("doc/" + id + ".html"), writer);
-        add(new DocumentationPanel(id + DOC_SUFFIX, writer.toString()).setEscapeModelStrings(false));
+        add(new Label(id + DOC_SUFFIX, writer.toString()).setEscapeModelStrings(false));
     }
 
     private void addResult(String id) {
