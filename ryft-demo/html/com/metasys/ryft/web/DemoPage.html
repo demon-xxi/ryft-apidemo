@@ -13,6 +13,9 @@
     <body>
         <div class="container">
             <div wicket:id="debug" style="z-index:9999;top:60px;position:fixed"></div> 
+            <div id="ajaxIndicator" class="ajaxFeedback" style="display: none;">
+                <div class="indicator-content">Please wait... <img src="img/loading.gif" width="16" height="16" alt="loading" /></div>
+            </div>
             <div class="top">
                 <div class="left"><img src="img/ryft_logo.png"/></div>
                 <div class="right title">Breakaway analytics performance</div>
@@ -141,9 +144,7 @@
                             <div wicket:id="searchQuery"></div>
                             <div wicket:id="searchWidth"></div>
                             <br style="clear: both" /><br />
-                            <div class="submit">
-                                <input type="submit" value="execute" wicket:id="searchExecute" />
-                            </div>
+                            <img alt="Execute Search" wicket:id="searchExecute" />
                             <br />
                             <div wicket:id="searchResult">
                                 Result
@@ -162,9 +163,7 @@
                             <div wicket:id="fuzzyWidth"></div>
                             <div wicket:id="fuzziness"></div>
                             <br style="clear: both" /><br />
-                            <div class="submit">
-                                <input type="submit" value="execute" wicket:id="fuzzyExecute" />
-                            </div>
+                            <img alt="Execute Fuzzy Search" wicket:id="fuzzyExecute" />
                             <br />
                             <div wicket:id="fuzzyResult">
                                 Result
@@ -182,9 +181,7 @@
                             <div wicket:id="termField"></div>
                             <div wicket:id="termFormat"></div>
                             <br style="clear: both" /><br />
-                            <div class="submit">
-                                <input type="submit" value="execute" wicket:id="termExecute" />
-                            </div>
+                            <img alt="Execute Term Frequency" wicket:id="termExecute" />
                             <br />
                             <div wicket:id="termResult">
                                 Result
@@ -202,9 +199,7 @@
                             <div wicket:id="sortField"></div>
                             <div wicket:id="sortOrder"></div>
                             <br style="clear: both" /><br />
-                            <div class="submit">
-                                <input type="submit" value="execute" wicket:id="sortExecute" />
-                            </div>
+                            <img alt="Execute Sort" wicket:id="sortExecute" />
                             <br />
                             <div wicket:id="sortResult">
                                 Result

@@ -18,6 +18,19 @@ body {
     padding: 0px; 
 }
 
+.ajaxFeedback {
+    padding-left: 50px;
+    float: left;
+    position: absolute;
+    left: 300px;
+    top: 70px;
+}
+
+.indicator-content {
+    font-size: 10pt;
+    font-style: italic;
+}
+
 /* *** Header and page Sections ********************************************* */
 
 .container {
