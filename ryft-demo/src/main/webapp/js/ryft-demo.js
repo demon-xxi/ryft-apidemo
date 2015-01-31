@@ -11,7 +11,7 @@ function init() {
     // initialize list of already selected files for input dataset
     $(inputSelector).val().split(',').forEach(function(file) {
     	if (file.length > 0) {
-            $('#inputSelection').append('<li>'+file+'</li>');
+            $('#inputSelection').append('<li><span>'+file+'<span></li>');
     	}
     });
     // server-side file browser (http://www.abeautifulsite.net/jquery-file-tree)
@@ -24,41 +24,34 @@ function init() {
             collapseSpeed: 750,
             multiFolder: false
         }, function(file) {
-            $('#inputSelection').append('<li>'+file+'</li>');
-            if ($(inputSelector).val().length > 0) {
-                file = ',' + file;
+            current = $(inputSelector).val();
+            if (current.indexOf(file) == -1) {
+                $('#inputSelection').append('<li><span>'+file+'<span></li>');
+                if ($(inputSelector).val().length > 0) {
+                    file = ',' + file;
+                }
+                $(inputSelector).val(current + file);
             }
-            $(inputSelector).val($(inputSelector).val() + file);
         }
     );
-    buildDocumentations();
+
+    $(".info-icon > img").mouseover(function() {
+    	panel = $('#currentPanel').val();
+        $('#arrow-info').show();
+        $('#' + panel + '-info').show();
+    });
+    $('.documentation').mouseleave(function() {
+        $('#arrow-info').hide();
+        $('#' + panel + '-info').hide();
+    });
+    $("#clear-all").click(function() {
+        $("#clear-all").blur();
+	    $('#inputSelection').empty();
+	    $(inputSelector).val('');
+    });
 }
 // user request to show a new panel 
 function show(id) {
     $('#newPanel').val(id);
     $('form').submit();
-}
-// clears input dataset selection
-function clearInput() {
-	$(inputSelector).val('');
-	$('#inputSelection').empty();
-}
-// for the documentation panels
-function buildDocumentations() {
-	var headers = $('.ui-accordion .accordion-header');
-	var contentAreas = $('.ui-accordion .ui-accordion-content ').hide();
-	headers.click(function() {
-	    var panel = $(this).next();
-	    var isOpen = panel.is(':visible');
-
-	    // open or close
-	    panel[isOpen? 'slideUp': 'slideDown']().trigger(isOpen? 'hide': 'show');
-	    
-	    // update header icon
-	    $(this).children(":first")
-	        .removeClass(isOpen? 'ui-icon-triangle-1-s': 'ui-icon-triangle-1-e')
-	        .addClass(isOpen? 'ui-icon-triangle-1-e': 'ui-icon-triangle-1-s');
-	
-	    return false;
-	});
 }

@@ -11,144 +11,216 @@
         <link href="file-browser/jqueryFileTree.css" rel="stylesheet" type="text/css" media="screen" />
     </head>
     <body>
-        <div class="header">
-            <img class="title" src="img/ryft_logo.png" /><span class="title">Actionable Intelligence from complex data</span>
-            <br style="clear: both" />
-        </div>
-        <div class="content">
+        <div class="container">
             <div wicket:id="debug" style="z-index:9999;top:60px;position:fixed"></div> 
-            <div id="ajaxIndicator" class="ajaxFeedback" style="display: none;">
-                <div class="indicator-content">Please wait... <img src="img/loading.gif" width="16" height="16" alt="loading" /></div>
+            <div class="top">
+                <div class="left"><img src="img/ryft_logo.png"/></div>
+                <div class="right title">Breakaway analytics performance</div>
             </div>
-            <br style="clear: both" />
-            <span wicket:id="feedbackPanel"></span>
-            <br style="clear: both" />
-            
-            <div class="left-menu">
-                <nav>
-                    <ul>
-                        <li class="top">Define</li>
-                        <li>
-	                        <ul>
-	                            <li class="item" id="dataset-menu"><a href="javascript:show('dataset')">Dataset</a></li>
-	                            <li class="item" id="output-menu"><a href="javascript:show('output')">Output File</a></li>
-	                            <li class="item" id="settings-menu"><a href="javascript:show('settings')">Settings</a></li>
-	                        </ul>
-                        </li>
-                        <li class="top">Analytics</li>
-                        <li>
-	                        <ul>
-	                            <li class="item" id="search-menu"><a href="javascript:show('search')">Search</a></li>
-	                            <li class="item" id="fuzzy-menu"><a href="javascript:show('fuzzy')">Fuzzy Search</a></li>
-	                            <li class="item" id="term-menu"><a href="javascript:show('term')">Term Frequency</a></li>
-	                            <li class="item" id="sort-menu"><a href="javascript:show('sort')">Sort</a></li>
-	                            <li class="item more">And more...</li>
-	                        </ul>
-	                    </li>
-                    </ul>
-                </nav>
+            <div class="bottom">
+                <div class="left">
+                    <div class="menu">                    
+                        <nav>
+                            <ul>
+                                <li class="section">Define</li>
+                                <li>
+                                    <ul>
+                                        <li class="item" id="dataset-menu">
+                                            <div class="menu-item-wrapper" onclick="javascript:show('dataset')">
+                                                <div class="icon"><img src="img/dataset-icon.png" />Dataset</div>
+                                                <div class="arrow"><img src="img/arrow-left.png" /></div>
+                                            </div>
+                                        </li>
+                                        <li class="item" id="output-menu">
+                                            <div class="menu-item-wrapper" onclick="javascript:show('output')">
+                                                <div class="icon"><img src="img/output-icon.png" />Output File</div>
+                                                <div class="arrow"><img src="img/arrow-left.png" /></div>
+                                            </div>
+                                        </li>
+                                        <li class="item" id="settings-menu">
+                                            <div class="menu-item-wrapper" onclick="javascript:show('settings')">
+                                                <div class="icon"><img src="img/settings-icon.png" />Settings</div>
+                                                <div class="arrow"><img src="img/arrow-left.png" /></div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="section">Analytics</li>
+                                <li>
+                                    <ul>
+                                        <li class="item" id="search-menu">
+                                            <div class="menu-item-wrapper" onclick="javascript:show('search')">
+                                                <div class="icon"><img src="img/search-icon.png" />Search</div>
+                                                <div class="arrow"><img src="img/arrow-left.png" /></div>
+                                            </div>
+                                        </li>
+                                        <li class="item" id="fuzzy-menu">
+                                            <div class="menu-item-wrapper" onclick="javascript:show('fuzzy')">
+                                                <div class="icon"><img src="img/fuzzy-icon.png" />Fuzzy Search</div>
+                                                <div class="arrow"><img src="img/arrow-left.png" /></div>
+                                            </div>
+                                        </li>
+                                        <li class="item" id="term-menu">
+                                            <div class="menu-item-wrapper" onclick="javascript:show('term')">
+                                                <div class="icon"><img src="img/term-icon.png" />Term Frequency</div>
+                                                <div class="arrow"><img src="img/arrow-left.png" /></div>
+                                            </div>
+                                        </li>
+                                        <li class="item" id="sort-menu">
+                                            <div class="menu-item-wrapper" onclick="javascript:show('sort')">
+                                                <div class="icon"><img src="img/sort-icon.png" />Sort</div>
+                                                <div class="arrow"><img src="img/arrow-left.png" /></div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+                <div class="right content">
+                    <span wicket:id="feedbackPanel"></span>
+                    <form wicket:id="ryft-demo-form">
+                        <input type="hidden" id="currentPanel" wicket:id="currentPanel" />
+                        <input type="hidden" id="newPanel" wicket:id="newPanel" />
+                        <div class="panel" id="dataset">
+                            <div class="panel-header">
+                                <div class="icon"><img src="img/dataset-icon.png" /></div>
+                                <div class="panel-title">Please select the location of your Input Dataset</div>
+                                <div class="info-icon">
+                                    <img src="img/info.png" alt="info" />
+                                </div>
+                            </div>
+                            <br style="clear:both"/>
+                            <div id="input" wicket:id="input">Wicket-managed input field</div>
+                            <div class="selection-wrapper">
+                                <div class="header">Select the files to add to the Input Dataset</div>
+                                <div id="input-dataset" class="browser"></div>
+                                <img id="clear-all" src="img/clear.png" alt="Clear All" />
+                            </div>
+                            <div class="space">&nbsp;</div>
+                            <div class="selection-wrapper">
+                                <div class="header">Selected files</div>
+                                <div class="selection">
+                                    <ul id="inputSelection"></ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel" id="output">
+                            <div class="panel-header">
+                                <div class="icon"><img src="img/output-icon.png" /></div>
+                                <div class="panel-title">Please select the location of your Output File</div>
+                                <div class="info-icon">
+                                    <img src="img/info.png" alt="info" />
+                                </div>
+                            </div>
+                            <br style="clear:both"/>
+                            <div wicket:id="output"></div>
+                            <div wicket:id="writeIndex"></div>
+                        </div>
+                        <div class="panel" id="settings">
+                            <div class="panel-header">
+                                <div class="icon"><img src="img/settings-icon.png" /></div>
+                                <div class="panel-title">Please configure your Ryft One Settings here</div>
+                                <div class="info-icon">
+                                    <img src="img/info.png" alt="info" />
+                                </div>
+                            </div>
+                            <br style="clear:both"/>
+                            <div wicket:id="nodes"></div>
+                        </div>
+                        <div class="panel" id="search">
+                            <div class="panel-header">
+                                <div class="icon"><img src="img/search-icon.png" /></div>
+                                <div class="panel-title">Search</div>
+                                <div class="info-icon">
+                                    <img src="img/info.png" alt="info" />
+                                </div>
+                            </div>
+                            <br style="clear:both"/>
+                            <div wicket:id="searchQuery"></div>
+                            <div wicket:id="searchWidth"></div>
+                            <br style="clear: both" /><br />
+                            <div class="submit">
+                                <input type="submit" value="execute" wicket:id="searchExecute" />
+                            </div>
+                            <br />
+                            <div wicket:id="searchResult">
+                                Result
+                            </div>
+                        </div>
+                        <div class="panel" id="fuzzy">
+                            <div class="panel-header">
+                                <div class="icon"><img src="img/fuzzy-icon.png" /></div>
+                                <div class="panel-title">Fuzzy Search</div>
+                                <div class="info-icon">
+                                    <img src="img/info.png" alt="info" />
+                                </div>
+                            </div>
+                            <br style="clear:both"/>
+                            <div wicket:id="fuzzyQuery"></div>
+                            <div wicket:id="fuzzyWidth"></div>
+                            <div wicket:id="fuzziness"></div>
+                            <br style="clear: both" /><br />
+                            <div class="submit">
+                                <input type="submit" value="execute" wicket:id="fuzzyExecute" />
+                            </div>
+                            <br />
+                            <div wicket:id="fuzzyResult">
+                                Result
+                            </div>
+                        </div>
+                        <div class="panel" id="term">
+                            <div class="panel-header">
+                                <div class="icon"><img src="img/term-icon.png" /></div>
+                                <div class="panel-title">Term Frequency</div>
+                                <div class="info-icon">
+                                    <img src="img/info.png" alt="info" />
+                                </div>
+                            </div>
+                            <br style="clear:both"/>
+                            <div wicket:id="termField"></div>
+                            <div wicket:id="termFormat"></div>
+                            <br style="clear: both" /><br />
+                            <div class="submit">
+                                <input type="submit" value="execute" wicket:id="termExecute" />
+                            </div>
+                            <br />
+                            <div wicket:id="termResult">
+                                Result
+                            </div>
+                        </div>
+                        <div class="panel" id="sort">
+                            <div class="panel-header">
+                                <div class="icon"><img src="img/sort-icon.png" /></div>
+                                <div class="panel-title">Sort</div>
+                                <div class="info-icon">
+                                    <img src="img/info.png" alt="info" />
+                                </div>
+                            </div>
+                            <br style="clear:both"/>
+                            <div wicket:id="sortField"></div>
+                            <div wicket:id="sortOrder"></div>
+                            <br style="clear: both" /><br />
+                            <div class="submit">
+                                <input type="submit" value="execute" wicket:id="sortExecute" />
+                            </div>
+                            <br />
+                            <div wicket:id="sortResult">
+                                Result
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
-            
-            <form wicket:id="ryft-demo-form">
-                <input type="hidden" id="currentPanel" wicket:id="currentPanel" />
-                <input type="hidden" id="newPanel" wicket:id="newPanel" />
-                <div class="panel" id="dataset">
-                    <div class="panel-title">Please select location of your Input Dataset</div>
-                    <div id="input" wicket:id="input">Wicket-managed input field</div>
-                    <br />
-                    <div>Select the files to add to the Input Dataset</div>
-                    <div id="input-dataset" class="browser"></div>
-                    <div class="selection">
-                        <span>Selected files</span>
-                        <ul id="inputSelection"></ul>
-                    </div>
-                    <br style="clear: both" /><br />
-                    <div class="submit">
-	                    <input type="button" value="Clear All" onclick="javascript:clearInput()" />
-                    </div>
-                    <br style="clear: both" /><br />
-                    <div wicket:id="inputDoc">Wicket-managed input doc</div>
-                </div>
-                <div class="panel" id="output">
-                    <div class="panel-title">Please select location of your Output File</div>
-                    <div wicket:id="output"></div>
-                    <div wicket:id="writeIndex"></div>
-                    <br style="clear: both" /><br />
-                    <div wicket:id="outputDoc">Wicket-managed output doc</div>
-                </div>
-                <div class="panel" id="settings">
-                    <div class="panel-title">Please configure your Ryft One Settings here</div>
-                    <div wicket:id="nodes"></div>
-                    <br style="clear: both" /><br />
-                    <div wicket:id="settingsDoc">Wicket-managed settings doc</div>
-                </div>
-                <div class="panel" id="search">
-                    <div class="panel-title">Search</div>
-                    <div wicket:id="searchQuery"></div>
-                    <div wicket:id="searchWidth"></div>
-                    <br style="clear: both" /><br />
-                    <div class="submit">
-                        <input type="submit" value="execute" wicket:id="searchExecute" />
-                    </div>
-                    <br />
-                    <div wicket:id="searchResult">
-                        Result
-                    </div>
-                    <br style="clear: both" /><br />
-                    <div wicket:id="searchDoc">Wicket-managed search doc</div>
-                </div>
-                <div class="panel" id="fuzzy">
-                    <div class="panel-title">Fuzzy Search</div>
-                    <div wicket:id="fuzzyQuery"></div>
-                    <div wicket:id="fuzzyWidth"></div>
-                    <div wicket:id="fuzziness"></div>
-                    <br style="clear: both" /><br />
-                    <div class="submit">
-                        <input type="submit" value="execute" wicket:id="fuzzyExecute" />
-                    </div>
-                    <br />
-                    <div wicket:id="fuzzyResult">
-                        Result
-                    </div>
-                    <br style="clear: both" /><br />
-                    <div wicket:id="fuzzyDoc">Wicket-managed fuzzy doc</div>
-                </div>
-                <div class="panel" id="term">
-                    <div class="panel-title">Term Frequency</div>
-                    <div wicket:id="termField"></div>
-                    <div wicket:id="termFormat"></div>
-                    <br style="clear: both" /><br />
-                    <div class="submit">
-                        <input type="submit" value="execute" wicket:id="termExecute" />
-                    </div>
-                    <br />
-                    <div wicket:id="termResult">
-                        Result
-                    </div>
-                    <br style="clear: both" /><br />
-                    <div wicket:id="termDoc">Wicket-managed term doc</div>
-                </div>
-                <div class="panel" id="sort">
-                    <div class="panel-title">Sort</div>
-                    <div wicket:id="sortField"></div>
-                    <div wicket:id="sortOrder"></div>
-                    <br style="clear: both" /><br />
-                    <div class="submit">
-                        <input type="submit" value="execute" wicket:id="sortExecute" />
-                    </div>
-                    <br />
-                    <div wicket:id="sortResult">
-                        Result
-                    </div>
-                    <br style="clear: both" /><br />
-                    <div wicket:id="sortDoc">Wicket-managed sort doc</div>
-                </div>
-            </form>
-            
-            <br /><br />
-        </div>
-        <div class="footer">
-            &copy; <span wicket:id="year">2015</span> Ryft Systems, Inc.
+            <div id="arrow-info" class="documentation-arrow"><img src="img/doc-arrow.png"/></div>
+            <div id="dataset-info" class="documentation" wicket:id="inputDoc"></div>
+            <div id="output-info" class="documentation" wicket:id="outputDoc"></div>
+            <div id="settings-info" class="documentation" wicket:id="settingsDoc"></div>
+            <div id="search-info" class="documentation" wicket:id="searchDoc"></div>
+            <div id="fuzzy-info" class="documentation" wicket:id="fuzzyDoc"></div>
+            <div id="term-info" class="documentation" wicket:id="termDoc"></div>
+            <div id="sort-info" class="documentation" wicket:id="sortDoc"></div>
         </div>
     </body>
 </html>

@@ -60,7 +60,7 @@ public class FileBrowserApi {
         absoluteRoot = new File(rootFolder).getCanonicalPath();
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/browse")
+    @RequestMapping(method = RequestMethod.POST, value = "/browse", produces = "text/html")
     @ResponseBody
     public String browse(@RequestParam("dir") String dir) {
         LOG.debug("Listing {}", dir);
