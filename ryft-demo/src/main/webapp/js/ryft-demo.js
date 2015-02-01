@@ -7,6 +7,8 @@ function init() {
     // show currently active panel
     panel = $('#currentPanel').val();
     $('#' + panel + '-menu').addClass('selected');
+    var src = $('#' + panel + '-menu > div > div.icon > img').attr('src').replace('-gray.png', '.png');
+    $('#' + panel + '-menu > div > div.icon > img').attr('src', src);
     $('#' + panel).show();
     // initialize list of already selected files for input dataset
     $(inputSelector).val().split(',').forEach(function(file) {

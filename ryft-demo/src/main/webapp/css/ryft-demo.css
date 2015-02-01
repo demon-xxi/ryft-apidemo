@@ -8,7 +8,7 @@ body {
     background-color: #ffffff;
     color: #000000;
     
-    font-family: Verdana, sans-serif;
+    font-family: 'Open Sans', sans-serif;
     font-size: 11px;
     line-height: 1.8em;
     
@@ -75,6 +75,7 @@ body {
     text-transform: uppercase;
     text-align: left;
     font-size: 17pt;
+    font-family: 'Rajdhani', sans-serif;
 }
 
 .bottom {
@@ -89,6 +90,9 @@ body {
 
 .menu {
     background-image: url("../img/menu-bg.png");
+    background-repeat: no-repeat;
+    background-position: bottom;
+    background-color: #000000;
     height: 100%;
     color: #a6b0b9;
 }
@@ -101,16 +105,18 @@ body {
 
 .menu .section, .menu .item {
     line-height: 50px;
-    font-size: 15pt;
+    font-size: 15px;
     vertical-align: middle;
     border-bottom: 1px solid #797979;
     clear: both;
 }
 
 .menu .section {
+    font-family: 'Rajdhani', sans-serif;
     text-transform: uppercase;
     padding-top: 25px;
     padding-left: 30px;
+    font-size: 17px;
 }
 
 .menu-item-wrapper {
@@ -128,7 +134,7 @@ body {
     display: inline-block;
     vertical-align: middle;
     margin: auto;
-    padding-right: 10px;
+    padding-right: 20px;
 }
 
 .menu-item-wrapper .arrow {
@@ -170,10 +176,28 @@ body {
 .panel-header .panel-title {
     float: left;
     vertical-align: middle;
+    font-size: 15px;
 }
 
 .panel-header .info-icon {
     float: right;
+}
+
+.button {
+    background-image: url("../img/button.png");
+    width: 113px;
+    height: 32px;
+    line-height: 32px;
+    text-transform: uppercase;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.button:hover {
+    background-image: url("../img/button-hover.png");
+    color: #ffffff;
 }
 
 .selection-wrapper {
@@ -210,13 +234,15 @@ body {
     color: #000000;
 }
 
-.selection-wrapper img {
-    padding-left: 20px;
+.selection-wrapper .button {
+    margin-left: 20px;
+    margin-bottom: 10px;
+    margin-top: 10px;
 }
 
 .browser {
     width: 276px;
-    height: 505px;
+    height: 493px;
     overflow: auto;
     padding-left: 20px;
     padding-top: 15px;
@@ -240,6 +266,15 @@ body {
 
 .documentation table, th, td {
     border: 1px solid white;
+}
+
+.documentation li {
+    list-style-type: square;
+    color: #7bd8e0;
+}
+
+.documentation li span {
+    color: #ffffff;
 }
 
 .documentation-arrow {

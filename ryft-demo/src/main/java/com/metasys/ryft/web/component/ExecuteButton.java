@@ -4,8 +4,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
-import org.apache.wicket.markup.html.image.Image;
-import org.apache.wicket.request.resource.ContextRelativeResource;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
@@ -21,11 +21,9 @@ import com.metasys.ryft.api.RyftApi;
  * @author Sylvain Crozon
  *
  */
-public class ExecuteButton extends Image {
+public class ExecuteButton extends Label {
 
     private static final Logger LOG = LogManager.getLogger(ExecuteButton.class);
-
-    private static final String EXECUTE_IMAGE_PATH = "img/execute.png";
 
     @SpringBean
     private RyftApi api;
@@ -47,7 +45,7 @@ public class ExecuteButton extends Image {
      *            the result panel to use to display the results
      */
     public ExecuteButton(String id, DemoForm form, Query query, ResultPanel resultPanel) {
-        super(id, new ContextRelativeResource(EXECUTE_IMAGE_PATH));
+        super(id, new StringResourceModel(id, form, null, id));
         this.form = form;
         this.query = query;
         this.resultPanel = resultPanel;
