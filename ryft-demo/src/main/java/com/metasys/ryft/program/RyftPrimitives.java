@@ -95,7 +95,7 @@ public final class RyftPrimitives {
     }
 
     protected static void execute(ProgramWriter program, int nodes) throws RyftException {
-        wrapPrimitive(program, "rol_execute_algorithm(" + nodes + ")");
+        wrapPrimitive(program, "rol_execute_algorithm(" + nodes + ", 0)");
     }
 
     protected static void statistics(ProgramWriter program, String type) throws RyftException {
