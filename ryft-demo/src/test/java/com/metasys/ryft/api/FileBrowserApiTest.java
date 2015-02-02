@@ -2,6 +2,9 @@ package com.metasys.ryft.api;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import mockit.Mock;
 import mockit.MockUp;
@@ -125,10 +128,22 @@ public class FileBrowserApiTest {
     }
 
     private void assertExpected(String path, String expected) {
-        Assert.assertEquals(expected, api.browse(path));
-        Assert.assertEquals(expected, apiWithTrailingSlash.browse(path));
-        Assert.assertEquals(expected, apiWithTrailingBackslash.browse(path));
-        Assert.assertEquals(expected, apiWithFullPath.browse(path));
+        compareHtmlList(expected, api.browse(path));
+        compareHtmlList(expected, apiWithTrailingSlash.browse(path));
+        compareHtmlList(expected, apiWithTrailingBackslash.browse(path));
+        compareHtmlList(expected, apiWithFullPath.browse(path));
+    }
+
+    private void compareHtmlList(String expected, String actual) {
+        int endFirstTag = expected.indexOf('>') + 1;
+        String ul = expected.substring(0, endFirstTag);
+        Assert.assertTrue(actual.startsWith(ul));
+        Assert.assertTrue(actual.endsWith("</ul>"));
+        List<String> expectedEntries = Arrays.asList(expected.substring(endFirstTag, expected.length() - 5).split("<li"));
+        Collections.sort(expectedEntries);
+        List<String> actualEntries = Arrays.asList(actual.substring(endFirstTag, actual.length() - 5).split("<li"));
+        Collections.sort(actualEntries);
+        Assert.assertEquals(expectedEntries, actualEntries);
     }
 
     private void assertEmpty(String path) {
