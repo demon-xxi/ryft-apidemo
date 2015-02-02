@@ -32,7 +32,7 @@ int main(__attribute__ ((unused))int argc, __attribute__ ((unused))char* argv[])
         printf("PRIERROR: %s:\n", rol_get_error_string());
         return ret_val;
     }
-    ret_val = rol_execute_algorithm(2);
+    ret_val = rol_execute_algorithm(2, 0);
     if (ret_val != 0) {
         printf("PRIERROR: %s:\n", rol_get_error_string());
         return ret_val;
