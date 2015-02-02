@@ -1,4 +1,6 @@
+#define __STDC_FORMAT_MACROS
 #include <stdio.h>
+#include <inttypes.h>
 #include <time.h>
 #include <libryftone.h>
 
