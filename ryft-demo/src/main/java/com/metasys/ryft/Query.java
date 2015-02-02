@@ -19,7 +19,7 @@ public class Query implements Serializable {
     public static final String RECORD = "RECORD";
     public static final String FIELD = RECORD + '.';
 
-    private static final int DEFAULT_NODES = 2;
+    private static final int DEFAULT_NODES = 1;
     private static final String DEFAULT_OUTPUT = "demo_output_";
 
     public enum SortOrder {

@@ -45,7 +45,7 @@ public class QueryTest {
             Assert.assertEquals("search", query.getType());
             Assert.assertEquals("input", query.getInput());
             Assert.assertEquals("demo_output_1234567890000", query.getOutput());
-            Assert.assertEquals(2, query.getNodes().intValue());
+            Assert.assertEquals(1, query.getNodes().intValue());
         }
     }
 
