@@ -43,6 +43,10 @@ Start the server:
 
 Open a browser on port 8989 of your server. 
 
+Once this has been done once, to quicky re-deploy with the latest changes from Git, run from the 'apidemo' folder 
+
+    ./ryft-demo/bin/redeploy.sh
+
 ### Configuration
 
 The ryft.properties contains details on each property to configure. There are at least 2 values that should be updated:
