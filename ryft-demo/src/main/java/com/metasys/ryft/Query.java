@@ -42,6 +42,7 @@ public class Query implements Serializable {
 
     private String sortField;
     private SortOrder sortOrder;
+    private boolean sortDescending;
 
     private String termFormat;
     private String termField;
@@ -69,17 +70,20 @@ public class Query implements Serializable {
                 break;
             case FUZZY:
                 if (fuzzyQuery == null || fuzzyWidth == null || fuzziness == null) {
-                    throw new RyftException("The query string, surrounding width and fuzziness must be specified for a search query");
+                    throw new RyftException("The query string, surrounding width and fuzziness must be specified for a fuzzy search query");
                 }
                 break;
             case TERM:
                 if (termField == null || termFormat == null) {
-                    throw new RyftException("Both the field and format must be specified for a search query");
+                    throw new RyftException("Both the field and format must be specified for a term frequency query");
                 }
                 break;
             case SORT:
-                if (sortField == null || sortOrder == null) {
-                    throw new RyftException("Both the field and sort order must be specified for a search query");
+                if (sortOrder == null) {
+                    sortOrder = sortDescending ? SortOrder.DESC : SortOrder.ASC;
+                }
+                if (sortField == null) {
+                    throw new RyftException("The sort field must be specified for a sort query");
                 }
                 break;
             default:
@@ -195,6 +199,14 @@ public class Query implements Serializable {
         this.sortOrder = sortOrder;
     }
 
+    public boolean isSortDescending() {
+        return sortDescending;
+    }
+
+    public void setSortDescending(boolean sortDescending) {
+        this.sortDescending = sortDescending;
+    }
+
     public String getTermFormat() {
         return termFormat;
     }
@@ -213,46 +225,21 @@ public class Query implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("Query [input=");
-        builder.append(input);
-        builder.append(", output=");
-        builder.append(output);
-        builder.append(", writeIndex=");
-        builder.append(writeIndex);
-        builder.append(", nodes=");
-        builder.append(nodes);
-        builder.append(", type=");
-        builder.append(type);
-        builder.append(", searchQuery=");
-        builder.append(searchQuery);
-        builder.append(", searchWidth=");
-        builder.append(searchWidth);
-        builder.append(", fuzzyQuery=");
-        builder.append(fuzzyQuery);
-        builder.append(", fuzzyWidth=");
-        builder.append(fuzzyWidth);
-        builder.append(", fuzziness=");
-        builder.append(fuzziness);
-        builder.append(", sortField=");
-        builder.append(sortField);
-        builder.append(", sortOrder=");
-        builder.append(sortOrder);
-        builder.append(", termFormat=");
-        builder.append(termFormat);
-        builder.append(", termField=");
-        builder.append(termField);
-        builder.append("]");
-        return builder.toString();
+        return "Query [id=" + id + ", type=" + type + ", input=" + input + ", output=" + output + ", writeIndex=" + writeIndex + ", nodes=" + nodes
+                + ", searchQuery=" + searchQuery + ", searchWidth=" + searchWidth + ", fuzzyQuery=" + fuzzyQuery + ", fuzzyWidth=" + fuzzyWidth
+                + ", fuzziness=" + fuzziness + ", sortField=" + sortField + ", sortOrder=" + sortOrder + ", sortDescending=" + sortDescending
+                + ", termFormat=" + termFormat + ", termField=" + termField + "]";
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + (sortDescending ? 1231 : 1237);
         result = prime * result + (fuzziness == null ? 0 : fuzziness.hashCode());
         result = prime * result + (fuzzyQuery == null ? 0 : fuzzyQuery.hashCode());
         result = prime * result + (fuzzyWidth == null ? 0 : fuzzyWidth.hashCode());
+        result = prime * result + (id == null ? 0 : id.hashCode());
         result = prime * result + (input == null ? 0 : input.hashCode());
         result = prime * result + (nodes == null ? 0 : nodes.hashCode());
         result = prime * result + (output == null ? 0 : output.hashCode());
@@ -279,6 +266,9 @@ public class Query implements Serializable {
             return false;
         }
         Query other = (Query) obj;
+        if (sortDescending != other.sortDescending) {
+            return false;
+        }
         if (fuzziness == null) {
             if (other.fuzziness != null) {
                 return false;
@@ -298,6 +288,13 @@ public class Query implements Serializable {
                 return false;
             }
         } else if (!fuzzyWidth.equals(other.fuzzyWidth)) {
+            return false;
+        }
+        if (id == null) {
+            if (other.id != null) {
+                return false;
+            }
+        } else if (!id.equals(other.id)) {
             return false;
         }
         if (input == null) {

@@ -80,21 +80,21 @@ public class QueryTest {
             query.validate();
             Assert.fail();
         } catch (RyftException e) {
-            Assert.assertEquals("The query string, surrounding width and fuzziness must be specified for a search query", e.getMessage());
+            Assert.assertEquals("The query string, surrounding width and fuzziness must be specified for a fuzzy search query", e.getMessage());
         }
         query.setFuzzyQuery("query");
         try {
             query.validate();
             Assert.fail();
         } catch (RyftException e) {
-            Assert.assertEquals("The query string, surrounding width and fuzziness must be specified for a search query", e.getMessage());
+            Assert.assertEquals("The query string, surrounding width and fuzziness must be specified for a fuzzy search query", e.getMessage());
         }
         query.setFuzzyWidth(2);
         try {
             query.validate();
             Assert.fail();
         } catch (RyftException e) {
-            Assert.assertEquals("The query string, surrounding width and fuzziness must be specified for a search query", e.getMessage());
+            Assert.assertEquals("The query string, surrounding width and fuzziness must be specified for a fuzzy search query", e.getMessage());
         }
         query.setFuzziness(3);
         query.validate();
@@ -109,14 +109,14 @@ public class QueryTest {
             query.validate();
             Assert.fail();
         } catch (RyftException e) {
-            Assert.assertEquals("Both the field and format must be specified for a search query", e.getMessage());
+            Assert.assertEquals("Both the field and format must be specified for a term frequency query", e.getMessage());
         }
         query.setTermField("field");
         try {
             query.validate();
             Assert.fail();
         } catch (RyftException e) {
-            Assert.assertEquals("Both the field and format must be specified for a search query", e.getMessage());
+            Assert.assertEquals("Both the field and format must be specified for a term frequency query", e.getMessage());
         }
         query.setTermFormat("format");
         query.validate();
@@ -131,16 +131,10 @@ public class QueryTest {
             query.validate();
             Assert.fail();
         } catch (RyftException e) {
-            Assert.assertEquals("Both the field and sort order must be specified for a search query", e.getMessage());
+            Assert.assertEquals("The sort field must be specified for a sort query", e.getMessage());
+            Assert.assertEquals(SortOrder.ASC, query.getSortOrder());
         }
         query.setSortField("field");
-        try {
-            query.validate();
-            Assert.fail();
-        } catch (RyftException e) {
-            Assert.assertEquals("Both the field and sort order must be specified for a search query", e.getMessage());
-        }
-        query.setSortOrder(SortOrder.ASC);
         query.validate();
     }
 

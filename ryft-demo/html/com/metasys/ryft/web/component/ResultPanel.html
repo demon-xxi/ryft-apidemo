@@ -4,13 +4,14 @@
         </style>
     </wicket:head>
 	<wicket:panel>
-	    <div class="result">
-	        <div id="title">Results</div><br />
-			<div wicket:id="statistics">
-				<div wicket:id="name">name</div>: <span wicket:id="value">value</span><br />
+	    <div class="results">
+	        <div class="header">RYFT ONE Performance</div>
+			<div wicket:id="statistics" class="stat">
+				<div wicket:id="name" class="stat-name">name</div>
+				<div wicket:id="value" class="stat-value">value</div>
 			</div>
-			<div><a wicket:id="outputFile" href="#">Output file</a></div><br />
-            <div><a wicket:id="indexFile" href="#">Index file</a></div><br />
+			<div class="stat"><a wicket:id="outputFile" href="#">Output file</a></div>
+            <div class="stat"><a wicket:id="indexFile" href="#">Index file</a></div>
 	   </div>
     </wicket:panel>
 </html>

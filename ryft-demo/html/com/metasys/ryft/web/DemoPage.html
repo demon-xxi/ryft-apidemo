@@ -120,8 +120,8 @@
                                 </div>
                             </div>
                             <br style="clear:both"/>
-                            <div wicket:id="output"></div>
-                            <div wicket:id="writeIndex"></div>
+                            <div class="componentContainer" wicket:id="output"></div>
+                            <div class="componentContainer" wicket:id="writeIndex"></div>
                         </div>
                         <div class="panel" id="settings">
                             <div class="panel-header">
@@ -132,7 +132,8 @@
                                 </div>
                             </div>
                             <br style="clear:both"/>
-                            <div wicket:id="nodes"></div>
+                            <div class="componentContainer" wicket:id="nodes"></div>
+                            <div id="settingsConfirm" class="button">Confirm</div>
                         </div>
                         <div class="panel" id="search">
                             <div class="panel-header">
@@ -143,11 +144,10 @@
                                 </div>
                             </div>
                             <br style="clear:both"/>
-                            <div wicket:id="searchQuery"></div>
-                            <div wicket:id="searchWidth"></div>
-                            <br style="clear: both" /><br />
+                            <div class="componentContainer" wicket:id="searchQuery"></div>
+                            <div class="componentContainer" wicket:id="searchWidth"></div>
                             <div wicket:id="searchExecute" class="button">Execute Search</div>
-                            <br />
+                            <br style="clear: both" /><br />
                             <div wicket:id="searchResult">
                                 Result
                             </div>
@@ -161,12 +161,11 @@
                                 </div>
                             </div>
                             <br style="clear:both"/>
-                            <div wicket:id="fuzzyQuery"></div>
-                            <div wicket:id="fuzzyWidth"></div>
-                            <div wicket:id="fuzziness"></div>
-                            <br style="clear: both" /><br />
+                            <div class="componentContainer" wicket:id="fuzzyQuery"></div>
+                            <div class="componentContainer" wicket:id="fuzzyWidth"></div>
+                            <div class="componentContainer" wicket:id="fuzziness"></div>
                             <div wicket:id="fuzzyExecute" class="button">Execute Search</div>
-                            <br />
+                            <br style="clear: both" /><br />
                             <div wicket:id="fuzzyResult">
                                 Result
                             </div>
@@ -180,11 +179,10 @@
                                 </div>
                             </div>
                             <br style="clear:both"/>
-                            <div wicket:id="termField"></div>
-                            <div wicket:id="termFormat"></div>
-                            <br style="clear: both" /><br />
+                            <div class="componentContainer" wicket:id="termField"></div>
+                            <div class="componentContainer" wicket:id="termFormat"></div>
                             <div wicket:id="termExecute" class="button">Execute TF</div>
-                            <br />
+                            <br style="clear: both" /><br />
                             <div wicket:id="termResult">
                                 Result
                             </div>
@@ -198,11 +196,10 @@
                                 </div>
                             </div>
                             <br style="clear:both"/>
-                            <div wicket:id="sortField"></div>
-                            <div wicket:id="sortOrder"></div>
-                            <br style="clear: both" /><br />
+                            <div class="componentContainer" wicket:id="sortField"></div>
+                            <div class="componentContainer" wicket:id="sortDescending"></div>
+                            <br style="clear: both" />
                             <div wicket:id="sortExecute" class="button">Execute Sort</div>
-                            <br />
                             <div wicket:id="sortResult">
                                 Result
                             </div>

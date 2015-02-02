@@ -51,6 +51,9 @@ function init() {
 	    $('#inputSelection').empty();
 	    $(inputSelector).val('');
     });
+    $("#settingsConfirm").click(function() {
+    	$('form').submit();
+    });
 }
 // user request to show a new panel 
 function show(id) {

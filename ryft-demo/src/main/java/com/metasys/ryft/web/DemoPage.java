@@ -17,7 +17,6 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.HiddenField;
-import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -26,7 +25,6 @@ import org.apache.wicket.validation.validator.RangeValidator;
 import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 import com.metasys.ryft.Configuration;
 import com.metasys.ryft.Query;
-import com.metasys.ryft.Query.SortOrder;
 import com.metasys.ryft.Result;
 import com.metasys.ryft.web.component.DemoForm;
 import com.metasys.ryft.web.component.ExecuteButton;
@@ -81,13 +79,13 @@ public class DemoPage extends WebPage implements IAjaxIndicatorAware {
     // sort
     private static final String SORT = Query.SORT;
     private static final String SORT_FIELD = SORT + "Field";
-    private static final String SORT_ORDER = SORT + "Order";
+    private static final String SORT_DESCENDING = SORT + "Descending";
 
     // ****** End Wicket IDs ****************************************
 
     // CSS to load for jQuery and Kendo
     private static final String[] KENDO_CSS = new String[] { "css/smoothness/jquery-ui.min.css", "css/kendo/kendo.common.min.css",
-            "css/kendo/kendo.default.min.css" };
+    "css/kendo/kendo.default.min.css" };
 
     // Holder of feedback keys already rendered to avoid duplicated messages for form components having their own embedded error messages
     public static final MetaDataKey<Boolean> IGNORE_FEEDBACK = new MetaDataKey<Boolean>() {
@@ -103,12 +101,6 @@ public class DemoPage extends WebPage implements IAjaxIndicatorAware {
     public DemoPage() throws Exception {
         super();
         query = new Query();
-        query.setInput("passengers.txt");
-        query.setSearchQuery("(RAW_TEXT CONTAINS (\"310-555-2323\"))");
-        query.setSearchWidth(21);
-        query.setFuzzyQuery("(RAW_TEXT CONTAINS \"Mr. Thomas Magnum\")");
-        query.setFuzzyWidth(25);
-        query.setFuzziness(2);
         addCommonComponents();
         addSettings();
         addSearch();
@@ -188,7 +180,7 @@ public class DemoPage extends WebPage implements IAjaxIndicatorAware {
 
     private void addSort() throws Exception {
         conditionalRequired(addTextField(SORT_FIELD), SORT);
-        conditionalRequired(addChoice(SORT_ORDER, SortOrder.values()), SORT);
+        conditionalRequired(addCheckBox(SORT_DESCENDING), SORT);
         addDoc(SORT);
         addResult(SORT);
     }
@@ -202,12 +194,6 @@ public class DemoPage extends WebPage implements IAjaxIndicatorAware {
 
     private FormComponentPanel addTextArea(String id) throws Exception {
         FormComponentPanel component = new FormComponentPanel(id, TextArea.class, this, query);
-        form.add(component);
-        return component;
-    }
-
-    private FormComponentPanel addChoice(String id, Enum<?>... choices) throws Exception {
-        FormComponentPanel component = new FormComponentPanel(id, RadioChoice.class, this, query, choices);
         form.add(component);
         return component;
     }
