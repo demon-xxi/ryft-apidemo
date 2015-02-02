@@ -79,4 +79,23 @@ public class Result implements Serializable {
         }
     }
 
+    public static class Line implements Serializable {
+        int number;
+        String content;
+
+        public Line(int number, String content) {
+            super();
+            this.number = number;
+            this.content = content;
+        }
+
+        public int getNumber() {
+            return number;
+        }
+
+        public String getContent() {
+            return content;
+        }
+    }
+
 }

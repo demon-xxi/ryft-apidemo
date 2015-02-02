@@ -67,10 +67,9 @@ public class FileBrowserApi {
         // builds an HTML response according to http://www.abeautifulsite.net/jquery-file-tree/#custom_connectors
         StringBuilder response = new StringBuilder();
         response.append("<ul class=\"jqueryFileTree\" style=\"display: none;\">");
-        dir = dir.replaceFirst(EXPECTED_ROOT, rootFolder);
-        File requestedDir = new File(dir);
+        File requestedDir = getFile(dir);
         try {
-            if (requestedDir.getCanonicalPath().startsWith(absoluteRoot) && requestedDir.isDirectory()) {
+            if (isAcceptable(requestedDir) && requestedDir.isDirectory()) {
                 File[] content = requestedDir.listFiles();
                 for (File item : content) {
                     response.append(addEntry(item));
@@ -88,8 +87,8 @@ public class FileBrowserApi {
     public byte[] getFile(HttpServletResponse response, @RequestParam("file") String file) throws Exception {
         LOG.debug("Get file {}", file);
         response.setHeader("Content-Disposition", "attachment; filename=\"" + file + "\"");
-        File requestedFile = new File(file.replaceFirst(EXPECTED_ROOT, rootFolder));
-        if (requestedFile.getCanonicalPath().startsWith(absoluteRoot) && requestedFile.isFile()) {
+        File requestedFile = getFile(file);
+        if (isAcceptable(requestedFile) && requestedFile.isFile()) {
             ByteArrayOutputStream content = new ByteArrayOutputStream();
             FileInputStream fis = new FileInputStream(requestedFile);
             IOUtils.copy(fis, content);
@@ -98,6 +97,14 @@ public class FileBrowserApi {
         }
         response.sendError(HttpStatus.NOT_FOUND.value(), "File not found " + file);
         return new byte[0];
+    }
+
+    public File getFile(String requestedFile) {
+        return new File(requestedFile.replaceFirst(EXPECTED_ROOT, rootFolder));
+    }
+
+    public boolean isAcceptable(File requestedFile) throws IOException {
+        return requestedFile.getCanonicalPath().startsWith(absoluteRoot);
     }
 
     private String addEntry(File file) {

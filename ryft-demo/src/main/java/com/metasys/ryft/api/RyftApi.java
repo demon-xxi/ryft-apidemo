@@ -92,9 +92,21 @@ public class RyftApi {
             if (Math.random() > successRate) {
                 throw new RyftException("Randomly failing");
             }
+            result.getStatistics().add(new Stat(Statistics.START_TIME, start));
+            result.getStatistics().add(new Stat(Statistics.EXECUTION_DURATION, System.currentTimeMillis() - start));
+            long results = (long) (963258 * Math.random());
+            if (Query.SEARCH.equals(query.getType()) || Query.FUZZY.equals(query.getType())) {
+                result.getStatistics().add(new Stat(Statistics.TOTAL_BYTES_PROCESSED, (long) (1234567 * Math.random())));
+                result.getStatistics().add(new Stat(Statistics.TOTAL_NUMBER_OF_MATCHES, results));
+            } else if (Query.TERM.equals(query.getType())) {
+                result.getStatistics().add(new Stat(Statistics.TOTAL_BYTES_PROCESSED, (long) (14785236 * Math.random())));
+                result.getStatistics().add(new Stat(Statistics.NUMBER_OF_TERMS, results));
+            }
             try {
                 FileWriter fw = new FileWriter(new File(ryftFsRoot, query.getOutput()));
-                fw.write("mocked output file content");
+                for (int i = 0; i < results; i++) {
+                    fw.write("mocked output result line " + i + "\n");
+                }
                 fw.flush();
                 fw.close();
                 fw = new FileWriter(new File(ryftFsRoot, ProgramManager.INDEX_PREFIX + query.getOutput()));
@@ -103,15 +115,6 @@ public class RyftApi {
                 fw.close();
             } catch (IOException e) {
                 LOG.error("Error writing mocked output", e);
-            }
-            result.getStatistics().add(new Stat(Statistics.START_TIME, start));
-            result.getStatistics().add(new Stat(Statistics.EXECUTION_DURATION, System.currentTimeMillis() - start));
-            if (Query.SEARCH.equals(query.getType()) || Query.FUZZY.equals(query.getType())) {
-                result.getStatistics().add(new Stat(Statistics.TOTAL_BYTES_PROCESSED, (long) (1234567 * Math.random())));
-                result.getStatistics().add(new Stat(Statistics.TOTAL_NUMBER_OF_MATCHES, (long) (963258 * Math.random())));
-            } else if (Query.TERM.equals(query.getType())) {
-                result.getStatistics().add(new Stat(Statistics.TOTAL_BYTES_PROCESSED, (long) (14785236 * Math.random())));
-                result.getStatistics().add(new Stat(Statistics.NUMBER_OF_TERMS, (long) (321478 * Math.random())));
             }
         }
         return result;

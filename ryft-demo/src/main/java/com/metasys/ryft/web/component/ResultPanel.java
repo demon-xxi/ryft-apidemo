@@ -1,7 +1,11 @@
 package com.metasys.ryft.web.component;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -10,18 +14,24 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.navigation.paging.IPageable;
+import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.metasys.ryft.Result;
+import com.metasys.ryft.Result.Line;
 import com.metasys.ryft.Result.Stat;
+import com.metasys.ryft.api.FileBrowserApi;
 import com.metasys.ryft.program.RyftPrimitives.Statistics;
 
 /**
@@ -30,7 +40,12 @@ import com.metasys.ryft.program.RyftPrimitives.Statistics;
  * @author Sylvain Crozon
  *
  */
-public class ResultPanel extends Panel {
+public class ResultPanel extends Panel implements IPageable {
+
+    private static final String RESULTS_ID = "results";
+    private static final String LINE_NUMBER_ID = "line#";
+    private static final String LINE_ID = "line";
+    private static final String NAV_ID = "nav";
 
     private static final String STATISTICS_ID = "statistics";
     private static final String NAME_ID = "name";
@@ -42,6 +57,11 @@ public class ResultPanel extends Panel {
     private static final int BYTES_UNIT = 1024;
     private static final Map<TimeUnit, String> TIME_UNITS;
     private static final NumberFormat NUMBER_FORMAT;
+
+    private static final int RESULTS_PER_PAGE = 10;
+
+    @SpringBean
+    private FileBrowserApi fileBrowserApi;
 
     static {
         TIME_UNITS = new LinkedHashMap<>();
@@ -56,15 +76,28 @@ public class ResultPanel extends Panel {
     }
 
     private Result result;
-    private ListView<Stat> listView;
+    private ListView<Line> results;
+    private long currentPage;
 
     public ResultPanel(String id, Result result) {
         super(id);
         setOutputMarkupId(true);
         setOutputMarkupPlaceholderTag(true);
         this.result = result;
-        listView = new ListView<Stat>(STATISTICS_ID, new PropertyModel<List<Stat>>(result, STATISTICS_ID)) {
-
+        results = new ListView<Line>(RESULTS_ID, new LineModel()) {
+            @Override
+            protected void populateItem(ListItem<Line> item) {
+                item.add(new Label(LINE_NUMBER_ID, item.getModelObject().getNumber()));
+                item.add(new Label(LINE_ID, item.getModelObject().getContent()));
+                if (item.getModelObject().getNumber() % 2 == 0) {
+                    item.add(new AttributeAppender("class", "odd").setSeparator(" "));
+                }
+            }
+        };
+        add(results);
+        results.setOutputMarkupId(true);
+        add(new PagingNavigator(NAV_ID, this));
+        add(new ListView<Stat>(STATISTICS_ID, new PropertyModel<List<Stat>>(result, STATISTICS_ID)) {
             @Override
             protected void populateItem(ListItem<Stat> item) {
                 String statName = item.getModelObject().getName().name();
@@ -83,8 +116,7 @@ public class ResultPanel extends Panel {
                     item.add(new Label(VALUE_ID, new PropertyModel<>(item.getModel(), VALUE_ID)));
                 }
             }
-        };
-        add(listView);
+        });
         add(new OutputLink(OUTPUT_FILE_ID, new FileModel(result, OUTPUT_FILE_ID)));
         add(new OutputLink(INDEX_FILE_ID, new FileModel(result, INDEX_FILE_ID)));
     }
@@ -92,6 +124,26 @@ public class ResultPanel extends Panel {
     @Override
     public boolean isVisible() {
         return !result.getStatistics().isEmpty();
+    }
+
+    @Override
+    public long getCurrentPage() {
+        return currentPage;
+    }
+
+    @Override
+    public void setCurrentPage(long page) {
+        currentPage = page;
+    }
+
+    @Override
+    public long getPageCount() {
+        for (Stat stat : result.getStatistics()) {
+            if (Statistics.NUMBER_OF_TERMS == stat.getName() || Statistics.TOTAL_NUMBER_OF_MATCHES == stat.getName()) {
+                return (long) Math.ceil((long) stat.getValue() / RESULTS_PER_PAGE);
+            }
+        }
+        return 0;
     }
 
     public Result getResult() {
@@ -132,6 +184,36 @@ public class ResultPanel extends Panel {
         }
         double value = size / Math.pow(BYTES_UNIT, exp);
         return String.format("%.2f %sB", value, unit);
+    }
+
+    class LineModel extends AbstractReadOnlyModel<List<Line>> {
+
+        @Override
+        public List<Line> getObject() {
+            List<Line> lines = new ArrayList<>(10);
+            try {
+                File outputFile = fileBrowserApi.getFile(result.getOutputFile());
+                if (fileBrowserApi.isAcceptable(outputFile)) {
+                    RandomAccessFile raf = new RandomAccessFile(outputFile, "r");
+                    String line = raf.readLine();
+                    int lineCount = 0;
+                    while (line != null && lines.size() < RESULTS_PER_PAGE) {
+                        if (lineCount >= currentPage * RESULTS_PER_PAGE) {
+                            lines.add(new Line(lineCount + 1, line));
+                        }
+                        lineCount++;
+                        line = raf.readLine();
+                    }
+                    raf.close();
+                } else {
+                    lines.add(new Line(0, "Error reading output file"));
+                }
+            } catch (IOException e) {
+                lines.add(new Line(0, "Error reading output file"));
+            }
+            return lines;
+        }
+
     }
 
     class OutputLink extends ExternalLink {

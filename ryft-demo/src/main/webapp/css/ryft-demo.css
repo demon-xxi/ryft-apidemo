@@ -219,21 +219,43 @@ body {
     width: 296px;
 }
 
+.result-line {
+    clear: both;
+    width: 388px;
+    font-size: 8pt;
+    padding: 5px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.odd {
+    background-color: #f3f3f3;
+}
+
+.result-line .number {
+    float: left;
+    text-align: right;
+    padding-right: 10px;
+    width: 25px;
+}
+
 .stat {
     clear: both;
-    width: 250px;
+    font-size: 8pt;
+    width: 190px;
     padding: 5px;
 }
+
 .stat-name {
     float: left;
-    width: 150px;
+    width: 120px;
 }
 
 .stat-value {
     float: left;
 }
 
-.stat a {
+a {
     color: #7bd8e0;
 }
 
