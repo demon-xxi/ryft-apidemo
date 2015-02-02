@@ -259,13 +259,21 @@ a {
     color: #7bd8e0;
 }
 
-.header {
+.header, .footer {
     line-height: 50px;
     height: 50px;
     vertical-align: middle;
     background-color: #fcfcfc;
     border-bottom: 1px solid #dadada;
     padding-left: 20px;
+}
+
+.header {
+    border-bottom: 1px solid #dadada;
+}
+
+.footer {
+    border-top: 1px solid #dadada;
 }
 
 .space {
