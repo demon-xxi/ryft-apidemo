@@ -26,6 +26,7 @@ function init() {
             collapseSpeed: 750,
             multiFolder: false
         }, function(file) {
+        	file = file.substring(1);
             current = $(inputSelector).val();
             if (current.indexOf(file) == -1) {
                 $('#inputSelection').append('<li><span>'+file+'<span></li>');
