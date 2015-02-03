@@ -1,6 +1,8 @@
 package com.metasys.ryft;
 
 import java.io.File;
+import java.io.InputStream;
+import java.util.Properties;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -61,7 +63,14 @@ public class DemoApplication extends WebApplication {
         String resourceBase = null;
         int port = 0;
         if (args.length == 0) {
-            port = 8989;
+            Properties properties = new Properties();
+            try (InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("ryft.properties")) {
+                properties.load(inputStream);
+            }
+            try {
+                port = Integer.parseInt(properties.getProperty("ryft.port", "8989"));
+            } catch (NumberFormatException e) {
+            }
             // try to figure out where the webapp folder is if not provided
             String[] options = new String[] { "src/main/webapp", ".", "webapp" };
             for (String option : options) {
