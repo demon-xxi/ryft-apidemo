@@ -124,6 +124,11 @@ body {
     height: 50px
 }
 
+.disabled {
+    cursor: auto;
+    background-color: #474750;
+}
+
 .menu-item-wrapper .icon {
     float: left;
 }
