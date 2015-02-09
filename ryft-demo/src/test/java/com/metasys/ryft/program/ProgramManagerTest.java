@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 
+import mockit.Mock;
+import mockit.MockUp;
 import mockit.Mocked;
 import mockit.StrictExpectations;
 
@@ -52,6 +54,12 @@ public class ProgramManagerTest {
         query.setTermField("termField");
         query.setTermFormat("RAW_TEXT");
         query.setNodes(2);
+        new MockUp<System>() {
+            @Mock
+            long currentTimeMillis() {
+                return 1234567890000l;
+            }
+        };
     }
 
     @After
@@ -69,7 +77,7 @@ public class ProgramManagerTest {
         query.setOutput(null);
         query.setType(Query.SEARCH);
         pm.generate(query, "nulloutput");
-        Assert.assertEquals("results_nulloutput", query.getOutput());
+        Assert.assertEquals("demo/output_1234567890000", query.getOutput());
     }
 
     @Test
@@ -77,7 +85,7 @@ public class ProgramManagerTest {
         query.setOutput("");
         query.setType(Query.SEARCH);
         pm.generate(query, "emptyoutput");
-        Assert.assertEquals("results_emptyoutput", query.getOutput());
+        Assert.assertEquals("demo/output_1234567890000", query.getOutput());
     }
 
     @Test
@@ -113,6 +121,14 @@ public class ProgramManagerTest {
         pm.setStatistics(false);
         pm.generate(query, "search_nostats");
         assertProgram("search_nostats");
+    }
+
+    @Test
+    public void testGenerateSearchSubFolder() throws Exception {
+        query.setType(Query.SEARCH);
+        query.setOutput("sub/output");
+        pm.generate(query, "search_subfolder");
+        assertProgram("search_subfolder");
     }
 
     @Test

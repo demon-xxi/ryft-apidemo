@@ -44,7 +44,7 @@ public class QueryTest {
         } catch (RyftException e) {
             Assert.assertEquals("search", query.getType());
             Assert.assertEquals("input", query.getInput());
-            Assert.assertEquals("demo_output_1234567890000", query.getOutput());
+            Assert.assertEquals("demo/output_1234567890000", query.getOutput());
             Assert.assertEquals(1, query.getNodes().intValue());
         }
     }
@@ -149,6 +149,21 @@ public class QueryTest {
         } catch (RyftException e) {
             Assert.assertEquals("Unknown query type", e.getMessage());
         }
+    }
+
+    @Test
+    public void testIndexOutput() {
+        Query query = new Query();
+        query.setOutput("output");
+        query.indexOutput();
+        Assert.assertEquals("output_1", query.getOutput());
+        query.indexOutput();
+        Assert.assertEquals("output_2", query.getOutput());
+        query.setOutput("newoutput");
+        query.indexOutput();
+        Assert.assertEquals("newoutput_1", query.getOutput());
+        query.indexOutput();
+        Assert.assertEquals("newoutput_2", query.getOutput());
     }
 
 }

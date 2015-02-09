@@ -58,10 +58,11 @@ public class ProgramManager {
         File programWorkDir = workingDirectory(id);
         LOG.debug("Generating C program for {} under {}", id, programWorkDir);
 
-        if (query.getOutput() == null || query.getOutput().length() == 0) {
-            query.setOutput("results_" + id);
-        }
         query.validate();
+        File output = new File(query.getOutput());
+        if (output.getParentFile() != null && !output.getParentFile().mkdirs()) {
+            LOG.warn("Error creating output directory for {}", query.getOutput());
+        }
 
         ProgramWriter program;
         try {
@@ -89,7 +90,12 @@ public class ProgramManager {
 
             RyftPrimitives.writeData(program, query.getOutput());
             if (query.isWriteIndex() && (Query.SEARCH.equals(query.getType()) || Query.FUZZY.equals(query.getType()))) {
-                RyftPrimitives.writeIndex(program, INDEX_PREFIX + query.getOutput());
+                StringBuilder index = new StringBuilder();
+                if (output.getParent() != null) {
+                    index.append(output.getParent()).append('/');
+                }
+                index.append(INDEX_PREFIX).append(output.getName());
+                RyftPrimitives.writeIndex(program, index.toString());
             }
             RyftPrimitives.execute(program, query.getNodes());
             if (statistics) {

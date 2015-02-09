@@ -20,7 +20,7 @@ public class Query implements Serializable {
     public static final String FIELD = RECORD + '.';
 
     private static final int DEFAULT_NODES = 1;
-    private static final String DEFAULT_OUTPUT = "demo_output_";
+    private static final String DEFAULT_OUTPUT = "demo/output_";
 
     public enum SortOrder {
         ASC, DESC;
@@ -47,6 +47,8 @@ public class Query implements Serializable {
     private String termFormat;
     private String termField;
 
+    private int outputIndex;
+
     public void validate() throws RyftException {
         if (type == null) {
             throw new RyftException("The type of query must be specified");
@@ -54,7 +56,7 @@ public class Query implements Serializable {
         if (input == null) {
             throw new RyftException("The input dataset must be specified");
         }
-        if (output == null) {
+        if (output == null || output.length() == 0) {
             output = DEFAULT_OUTPUT + System.currentTimeMillis();
         }
         if (nodes == null) {
@@ -91,6 +93,13 @@ public class Query implements Serializable {
         }
     }
 
+    public void indexOutput() {
+        if (outputIndex > 0) {
+            output = output.substring(0, output.lastIndexOf('_'));
+        }
+        output += "_" + ++outputIndex;
+    }
+
     public String getId() {
         return id;
     }
@@ -117,6 +126,7 @@ public class Query implements Serializable {
 
     public void setOutput(String output) {
         this.output = output;
+        outputIndex = 0;
     }
 
     public boolean isWriteIndex() {

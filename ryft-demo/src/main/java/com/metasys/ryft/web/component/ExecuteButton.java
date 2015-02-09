@@ -76,7 +76,7 @@ public class ExecuteButton extends Label {
                 Result result = api.execute(query);
                 resultPanel.getResult().copy(result);
                 // reset the output location as the program can't use twice the same output
-                query.setOutput(null);
+                query.indexOutput();
             } catch (RyftException e) {
                 LOG.error("Error executing query {}: {}", query, e.getMessage());
                 error(e.getMessage() + " (" + query.getId() + ")");

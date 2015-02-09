@@ -103,16 +103,20 @@ public class RyftApi {
                 result.getStatistics().add(new Stat(Statistics.NUMBER_OF_TERMS, results));
             }
             try {
-                FileWriter fw = new FileWriter(new File(ryftFsRoot, query.getOutput()));
+                File output = new File(ryftFsRoot, query.getOutput());
+                output.getParentFile().mkdirs();
+                FileWriter fw = new FileWriter(output);
                 for (int i = 0; i < results; i++) {
                     fw.write("mocked output result line " + i + "\n");
                 }
                 fw.flush();
                 fw.close();
-                fw = new FileWriter(new File(ryftFsRoot, ProgramManager.INDEX_PREFIX + query.getOutput()));
-                fw.write("mocked output index file content");
-                fw.flush();
-                fw.close();
+                if (query.isWriteIndex()) {
+                    fw = new FileWriter(new File(output.getParentFile(), ProgramManager.INDEX_PREFIX + output.getName()));
+                    fw.write("mocked output index file content");
+                    fw.flush();
+                    fw.close();
+                }
             } catch (IOException e) {
                 LOG.error("Error writing mocked output", e);
             }
