@@ -45,6 +45,8 @@ public class ProgramManager {
     private String tmpDir;
     @Value("${ryft.statistics:true}")
     private boolean statistics;
+    @Value("${ryft.fs.root}")
+    private String rootFolder;
 
     private File workingDirectory;
 
@@ -59,9 +61,11 @@ public class ProgramManager {
         LOG.debug("Generating C program for {} under {}", id, programWorkDir);
 
         query.validate();
-        File output = new File(query.getOutput());
-        if (output.getParentFile() != null && !output.getParentFile().mkdirs()) {
-            LOG.warn("Error creating output directory for {}", query.getOutput());
+        File output = new File(rootFolder, query.getOutput());
+        if (output.getParentFile() != null && !output.getParentFile().exists()) {
+            if (!output.getParentFile().mkdirs()) {
+                LOG.warn("Error creating output directory for {}", output.getAbsolutePath());
+            }
         }
 
         ProgramWriter program;
