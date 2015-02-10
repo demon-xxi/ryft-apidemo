@@ -234,6 +234,11 @@ body {
 
 /* *** Results section *** */
 
+.result-scroll {
+    overflow-x: scroll;
+    width: 388px;
+}
+
 .result-line {
     clear: both;
     width: 388px;
