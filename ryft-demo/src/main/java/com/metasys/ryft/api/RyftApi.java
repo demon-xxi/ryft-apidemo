@@ -94,7 +94,7 @@ public class RyftApi {
             }
             result.getStatistics().add(new Stat(Statistics.START_TIME, start));
             result.getStatistics().add(new Stat(Statistics.EXECUTION_DURATION, System.currentTimeMillis() - start));
-            long results = (long) (963258 * Math.random());
+            long results = (long) (55555 * Math.random());
             if (Query.SEARCH.equals(query.getType()) || Query.FUZZY.equals(query.getType())) {
                 result.getStatistics().add(new Stat(Statistics.TOTAL_BYTES_PROCESSED, (long) (1234567 * Math.random())));
                 result.getStatistics().add(new Stat(Statistics.TOTAL_NUMBER_OF_MATCHES, results));
@@ -107,7 +107,7 @@ public class RyftApi {
                 output.getParentFile().mkdirs();
                 FileWriter fw = new FileWriter(output);
                 for (int i = 0; i < results; i++) {
-                    fw.write("mocked output result line " + i + "\n");
+                    fw.write("mocked output result line " + i + " Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor\n");
                 }
                 fw.flush();
                 fw.close();
