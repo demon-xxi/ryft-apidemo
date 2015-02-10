@@ -140,7 +140,7 @@ public class ResultPanel extends Panel implements IPageable {
     public long getPageCount() {
         for (Stat stat : result.getStatistics()) {
             if (Statistics.NUMBER_OF_TERMS == stat.getName() || Statistics.TOTAL_NUMBER_OF_MATCHES == stat.getName()) {
-                return (long) Math.ceil((long) stat.getValue() / RESULTS_PER_PAGE);
+                return (long) Math.ceil(((Long) stat.getValue()).doubleValue() / RESULTS_PER_PAGE);
             }
         }
         return 0;
