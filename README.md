@@ -2,6 +2,23 @@ This project is a Web Interface and REST API to demonstrate the capabilities of 
 
 ## Building and deploying the server on Ubuntu
 
+### Using the Install script
+
+    curl -v -u 'your github username' -H 'Accept: application/vnd.github.v3.raw' -L https://api.github.com/repos/getryft/apidemo/contents/ryft-demo/bin/install.sh | sh
+    sudo service ryft-demo start
+    
+The script will automatically:
+* install Git, Java and Maven if they are not already installed
+* Clone the repository or pull the latest changes (if SSH keys are not configured, it will prompt for username/password)
+* Compile and install under /opt
+* Set-up upstart
+
+To avoid the password prompt when downloading the script, you can create an access token following [these instructions][13] and the use the following curl command:
+
+    curl -v -H 'Authorization: token INSERTYOURTOKEN' -H 'Accept: application/vnd.github.v3.raw' -L https://api.github.com/repos/getryft/apidemo/contents/ryft-demo/bin/install.sh | sh
+
+### Manually
+
 Install git:
 
     sudo apt-get install git
@@ -260,3 +277,4 @@ And finally the assembly.xml describes how to build a tar.gz file with everythin
 [10]: http://logging.apache.org/log4j/2.x/
 [11]: http://junit.org/
 [12]: http://jmockit.github.io/
+[13]: https://help.github.com/articles/creating-an-access-token-for-command-line-use/
