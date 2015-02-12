@@ -2,8 +2,9 @@
 
 # Target install directory
 target=${1-/opt}
+shift
 # User running the site
-user=ryft
+user=${1-ryft}
 
 # Versions
 ryft_version=1.0-SNAPSHOT
@@ -32,6 +33,7 @@ else
         echo "Error installing Git"
         exit 1
     fi
+    echo "  --> OK"
 fi
 
 echo "### Checking Java"
@@ -51,6 +53,7 @@ else
         echo "Error installing Java"
         exit 2
     fi
+    echo "  --> OK"
 fi
 
 echo "### Checking Maven"
@@ -68,6 +71,7 @@ else
         echo "Error installing Maven"
         exit 3
     fi
+    echo "  --> OK"
 fi
 
 if [ ! -d apidemo ]; then
