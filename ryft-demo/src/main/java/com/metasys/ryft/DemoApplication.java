@@ -1,6 +1,7 @@
 package com.metasys.ryft;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
@@ -63,14 +64,7 @@ public class DemoApplication extends WebApplication {
         String resourceBase = null;
         int port = 0;
         if (args.length == 0) {
-            Properties properties = new Properties();
-            try (InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("ryft.properties")) {
-                properties.load(inputStream);
-            }
-            try {
-                port = Integer.parseInt(properties.getProperty("ryft.port", "8989"));
-            } catch (NumberFormatException e) {
-            }
+            port = readPort();
             // try to figure out where the webapp folder is if not provided
             String[] options = new String[] { "src/main/webapp", ".", "webapp" };
             for (String option : options) {
@@ -86,6 +80,8 @@ public class DemoApplication extends WebApplication {
                     port = Integer.parseInt(args[1]);
                 } catch (NumberFormatException e) {
                 }
+            } else {
+                port = readPort();
             }
         }
         if (resourceBase == null) {
@@ -107,5 +103,17 @@ public class DemoApplication extends WebApplication {
 
     private static String usage() {
         return "usage: java -cp 'conf:lib/*' com.metasys.ryft.DemoApplication <webapp base folder> <port>";
+    }
+
+    private static int readPort() throws IOException {
+        Properties properties = new Properties();
+        try (InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("ryft.properties")) {
+            properties.load(inputStream);
+        }
+        try {
+            return Integer.parseInt(properties.getProperty("ryft.port", "8989"));
+        } catch (NumberFormatException e) {
+            return 0;
+        }
     }
 }
