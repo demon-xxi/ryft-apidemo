@@ -4,7 +4,7 @@ This project is a Web Interface and REST API to demonstrate the capabilities of 
 
 ### Using the Install script
 
-    curl -v -u 'your github username' -H 'Accept: application/vnd.github.v3.raw' -L https://api.github.com/repos/getryft/apidemo/contents/ryft-demo/bin/install.sh | sh
+    curl -u 'your github username' -H 'Accept: application/vnd.github.v3.raw' -L https://api.github.com/repos/getryft/apidemo/contents/ryft-demo/bin/install.sh | sh
     sudo service ryft-demo start
     
 The script will automatically:
@@ -15,7 +15,7 @@ The script will automatically:
 
 To avoid the password prompt when downloading the script, you can create an access token following [these instructions][13] and the use the following curl command:
 
-    curl -v -H 'Authorization: token INSERTYOURTOKEN' -H 'Accept: application/vnd.github.v3.raw' -L https://api.github.com/repos/getryft/apidemo/contents/ryft-demo/bin/install.sh | sh
+    curl -H 'Authorization: token INSERTYOURTOKEN' -H 'Accept: application/vnd.github.v3.raw' -L https://api.github.com/repos/getryft/apidemo/contents/ryft-demo/bin/install.sh | sh
 
 ### Manually
 
