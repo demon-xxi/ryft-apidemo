@@ -19,6 +19,11 @@ if [ $? -eq 0 ]; then
 else
     sudo useradd -m -s /bin/bash -U ${user}
     sudo usermod -a -G ${user} ${user}
+    sudo su -c "ssh-keygen -t dsa -P '' -f ~/.ssh/id_dsa" ${user}
+    sudo su -c "cat ~/.ssh/id_dsa.pub >> ~/.ssh/authorized_keys" ${user}
+    sudo su -c "chmod 755 ~/.ssh/" ${user}
+    sudo su -c "chmod 600 ~/.ssh/authorized_keys" ${user}
+    sudo su -c 'ssh -o "StrictHostKeyChecking no" localhost "id"' ${user}
 fi
 
 echo "### Checking Git"
