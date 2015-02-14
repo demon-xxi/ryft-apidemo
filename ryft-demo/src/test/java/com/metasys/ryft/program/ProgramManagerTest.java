@@ -34,6 +34,7 @@ public class ProgramManagerTest {
 
     private ProgramManager pm;
     private Query query;
+    private File workDir;
 
     @Before
     public void setUp() throws Exception {
@@ -60,6 +61,7 @@ public class ProgramManagerTest {
                 return 1234567890000l;
             }
         };
+        workDir = new File("target/c/id");
     }
 
     @After
@@ -167,11 +169,11 @@ public class ProgramManagerTest {
             {
                 new ProcessBuilder("/bin/sh", "-c", "/usr/bin/gcc -Wextra -g -Wall -L/usr/lib/x86_64-linux-gnu/ -c -o main.o main.c");
                 result = processBuilder;
-                processBuilder.directory(new File("target/c/id"));
+                processBuilder.directory(workDir);
                 result = processBuilder;
-                processBuilder.redirectError(new File("target/c/id/stderr.log"));
+                processBuilder.redirectError(new File(workDir, "stderr.log"));
                 result = processBuilder;
-                processBuilder.redirectOutput(new File("target/c/id/stdout.log"));
+                processBuilder.redirectOutput(new File(workDir, "stdout.log"));
                 result = processBuilder;
                 processBuilder.start();
                 result = process;
@@ -179,11 +181,11 @@ public class ProgramManagerTest {
                 result = 0;
                 new ProcessBuilder("/bin/sh", "-c", "/usr/bin/gcc main.o -o ryft_demo -lryftone");
                 result = processBuilder;
-                processBuilder.directory(new File("target/c/id"));
+                processBuilder.directory(workDir);
                 result = processBuilder;
-                processBuilder.redirectError(new File("target/c/id/stderr.log"));
+                processBuilder.redirectError(new File(workDir, "stderr.log"));
                 result = processBuilder;
-                processBuilder.redirectOutput(new File("target/c/id/stdout.log"));
+                processBuilder.redirectOutput(new File(workDir, "stdout.log"));
                 result = processBuilder;
                 processBuilder.start();
                 result = process;
@@ -200,11 +202,11 @@ public class ProgramManagerTest {
             {
                 new ProcessBuilder("/bin/sh", "-c", "/usr/bin/gcc -Wextra -g -Wall -L/usr/lib/x86_64-linux-gnu/ -c -o main.o main.c");
                 result = processBuilder;
-                processBuilder.directory(new File("target/c/id"));
+                processBuilder.directory(workDir);
                 result = processBuilder;
-                processBuilder.redirectError(new File("target/c/id/stderr.log"));
+                processBuilder.redirectError(new File(workDir, "stderr.log"));
                 result = processBuilder;
-                processBuilder.redirectOutput(new File("target/c/id/stdout.log"));
+                processBuilder.redirectOutput(new File(workDir, "stdout.log"));
                 result = processBuilder;
                 processBuilder.start();
                 result = new IOException();
@@ -219,11 +221,11 @@ public class ProgramManagerTest {
             {
                 new ProcessBuilder("/bin/sh", "-c", "/usr/bin/gcc -Wextra -g -Wall -L/usr/lib/x86_64-linux-gnu/ -c -o main.o main.c");
                 result = processBuilder;
-                processBuilder.directory(new File("target/c/id"));
+                processBuilder.directory(workDir);
                 result = processBuilder;
-                processBuilder.redirectError(new File("target/c/id/stderr.log"));
+                processBuilder.redirectError(new File(workDir, "stderr.log"));
                 result = processBuilder;
-                processBuilder.redirectOutput(new File("target/c/id/stdout.log"));
+                processBuilder.redirectOutput(new File(workDir, "stdout.log"));
                 result = processBuilder;
                 processBuilder.start();
                 result = process;
@@ -240,11 +242,11 @@ public class ProgramManagerTest {
             {
                 new ProcessBuilder("/bin/sh", "-c", "/usr/bin/gcc -Wextra -g -Wall -L/usr/lib/x86_64-linux-gnu/ -c -o main.o main.c");
                 result = processBuilder;
-                processBuilder.directory(new File("target/c/id"));
+                processBuilder.directory(workDir);
                 result = processBuilder;
-                processBuilder.redirectError(new File("target/c/id/stderr.log"));
+                processBuilder.redirectError(new File(workDir, "stderr.log"));
                 result = processBuilder;
-                processBuilder.redirectOutput(new File("target/c/id/stdout.log"));
+                processBuilder.redirectOutput(new File(workDir, "stdout.log"));
                 result = processBuilder;
                 processBuilder.start();
                 result = process;
@@ -252,11 +254,11 @@ public class ProgramManagerTest {
                 result = 0;
                 new ProcessBuilder("/bin/sh", "-c", "/usr/bin/gcc main.o -o ryft_demo -lryftone");
                 result = processBuilder;
-                processBuilder.directory(new File("target/c/id"));
+                processBuilder.directory(workDir);
                 result = processBuilder;
-                processBuilder.redirectError(new File("target/c/id/stderr.log"));
+                processBuilder.redirectError(new File(workDir, "stderr.log"));
                 result = processBuilder;
-                processBuilder.redirectOutput(new File("target/c/id/stdout.log"));
+                processBuilder.redirectOutput(new File(workDir, "stdout.log"));
                 result = processBuilder;
                 processBuilder.start();
                 result = process;
@@ -271,13 +273,13 @@ public class ProgramManagerTest {
     public void testExecute() throws Exception {
         new StrictExpectations() {
             {
-                new ProcessBuilder("/bin/sh", "-c", "./ryft_demo");
+                new ProcessBuilder("/bin/sh", "-c", "ssh localhost 'cd " + workDir.getAbsolutePath() + " ; ./ryft_demo'");
                 result = processBuilder;
-                processBuilder.directory(new File("target/c/id"));
+                processBuilder.directory(workDir);
                 result = processBuilder;
-                processBuilder.redirectError(new File("target/c/id/stderr.log"));
+                processBuilder.redirectError(new File(workDir, "stderr.log"));
                 result = processBuilder;
-                processBuilder.redirectOutput(new File("target/c/id/stdout.log"));
+                processBuilder.redirectOutput(new File(workDir, "stdout.log"));
                 result = processBuilder;
                 processBuilder.start();
                 result = process;
@@ -292,13 +294,13 @@ public class ProgramManagerTest {
     public void testExecuteError() throws Exception {
         new StrictExpectations() {
             {
-                new ProcessBuilder("/bin/sh", "-c", "./ryft_demo");
+                new ProcessBuilder("/bin/sh", "-c", "ssh localhost 'cd " + workDir.getAbsolutePath() + " ; ./ryft_demo'");
                 result = processBuilder;
-                processBuilder.directory(new File("target/c/id"));
+                processBuilder.directory(workDir);
                 result = processBuilder;
-                processBuilder.redirectError(new File("target/c/id/stderr.log"));
+                processBuilder.redirectError(new File(workDir, "stderr.log"));
                 result = processBuilder;
-                processBuilder.redirectOutput(new File("target/c/id/stdout.log"));
+                processBuilder.redirectOutput(new File(workDir, "stdout.log"));
                 result = processBuilder;
                 processBuilder.start();
                 result = process;
@@ -311,15 +313,16 @@ public class ProgramManagerTest {
 
     @Test
     public void testExecuteErrorWithLog() throws Exception {
+        workDir = new File("target/c/log");
         new StrictExpectations() {
             {
-                new ProcessBuilder("/bin/sh", "-c", "./ryft_demo");
+                new ProcessBuilder("/bin/sh", "-c", "ssh localhost 'cd " + workDir.getAbsolutePath() + " ; ./ryft_demo'");
                 result = processBuilder;
-                processBuilder.directory(new File("target/c/log"));
+                processBuilder.directory(workDir);
                 result = processBuilder;
-                processBuilder.redirectError(new File("target/c/log/stderr.log"));
+                processBuilder.redirectError(new File(workDir, "stderr.log"));
                 result = processBuilder;
-                processBuilder.redirectOutput(new File("target/c/log/stdout.log"));
+                processBuilder.redirectOutput(new File(workDir, "stdout.log"));
                 result = processBuilder;
                 processBuilder.start();
                 result = process;
@@ -327,7 +330,7 @@ public class ProgramManagerTest {
                 result = 255;
             }
         };
-        new File("target/c/log").mkdirs();
+        workDir.mkdirs();
         FileWriter fw = new FileWriter("target/c/log/stdout.log");
         fw.write("something\n");
         fw.write("PRIERROR: error from ryft #1\n");
@@ -348,13 +351,13 @@ public class ProgramManagerTest {
     public void testExecuteException() throws Exception {
         new StrictExpectations() {
             {
-                new ProcessBuilder("/bin/sh", "-c", "./ryft_demo");
+                new ProcessBuilder("/bin/sh", "-c", "ssh localhost 'cd " + workDir.getAbsolutePath() + " ; ./ryft_demo'");
                 result = processBuilder;
-                processBuilder.directory(new File("target/c/id"));
+                processBuilder.directory(workDir);
                 result = processBuilder;
-                processBuilder.redirectError(new File("target/c/id/stderr.log"));
+                processBuilder.redirectError(new File(workDir, "stderr.log"));
                 result = processBuilder;
-                processBuilder.redirectOutput(new File("target/c/id/stdout.log"));
+                processBuilder.redirectOutput(new File(workDir, "stdout.log"));
                 result = processBuilder;
                 processBuilder.start();
                 result = new IOException();
