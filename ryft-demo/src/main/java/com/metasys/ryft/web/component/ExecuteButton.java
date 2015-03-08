@@ -75,8 +75,6 @@ public class ExecuteButton extends Label {
                 query.setType(form.getPanelModel().getObject());
                 Result result = api.execute(query);
                 resultPanel.getResult().copy(result);
-                // reset the output location as the program can't use twice the same output
-                query.indexOutput();
             } catch (RyftException e) {
                 LOG.error("Error executing query {}: {}", query, e.getMessage());
                 error(e.getMessage() + " (" + query.getId() + ")");
