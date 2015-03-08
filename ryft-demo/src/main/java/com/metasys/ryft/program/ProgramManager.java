@@ -83,7 +83,7 @@ public class ProgramManager {
                     RyftPrimitives.fuzzySearch(program, query.getFuzzyQuery(), query.getFuzzyWidth(), query.getFuzziness());
                     break;
                 case Query.TERM:
-                    RyftPrimitives.termFrequency(program, query.getTermFormat(), query.getTermField());
+                    RyftPrimitives.termFrequency(program, query.getTermFormat(), query.getTermField(), query.getTermKey());
                     break;
                 case Query.SORT:
                     RyftPrimitives.sort(program, query.getSortField(), query.getSortOrder());

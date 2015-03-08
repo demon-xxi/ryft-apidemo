@@ -17,7 +17,7 @@ int main(__attribute__ ((unused))int argc, __attribute__ ((unused))char* argv[])
         printf("PRIERROR: %s:\n", rol_get_error_string());
         return ret_val;
     }
-    ret_val = rol_rawtext_based_term_frequency(&output, &input);
+    ret_val = rol_record_based_term_frequency(&output, &input, "key");
     if (ret_val != 0) {
         printf("PRIERROR: %s:\n", rol_get_error_string());
         return ret_val;

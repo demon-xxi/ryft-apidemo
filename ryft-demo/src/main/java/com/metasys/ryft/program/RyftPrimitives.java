@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.metasys.ryft.Query;
 import com.metasys.ryft.Query.SortOrder;
+import com.metasys.ryft.Query.TermFormat;
 import com.metasys.ryft.RyftException;
 
 /**
@@ -90,8 +91,20 @@ public final class RyftPrimitives {
         wrapPrimitive(program, "rol_sort_" + (SortOrder.ASC == order ? "ascending" : "descending") + "(&output, &input, \"" + field + "\")");
     }
 
-    protected static void termFrequency(ProgramWriter program, String format, String field) throws RyftException {
-        wrapPrimitive(program, "rol_term_frequency(&output, &input, \"" + format + "\", \"" + field + "\")");
+    protected static void termFrequency(ProgramWriter program, TermFormat format, String field, String key) throws RyftException {
+        switch (format) {
+            case RAW:
+                wrapPrimitive(program, "rol_rawtext_based_term_frequency(&output, &input)");
+                break;
+            case RECORD:
+                wrapPrimitive(program, "rol_record_based_term_frequency(&output, &input, \"" + key + "\")");
+                break;
+            case FIELD:
+                wrapPrimitive(program, "rol_field_based_term_frequency(&output, &input, \"" + field + "\", \"" + key + "\")");
+                break;
+            default:
+                throw new IllegalStateException("Unknown format " + format);
+        }
     }
 
     protected static void execute(ProgramWriter program, int nodes) throws RyftException {

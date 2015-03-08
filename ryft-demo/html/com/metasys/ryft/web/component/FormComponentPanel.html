@@ -54,7 +54,8 @@ input[type="text"] {
 }
 
 select {
-    height: 26px;
+    height: 32px;
+    width: 400px;
 }
 select[multiple="multiple"] {
     height: auto;
@@ -86,6 +87,9 @@ textarea.formInput {
         <wicket:fragment wicket:id="checkbox">
             <input wicket:id="fragment" type="checkbox" />
             <label wicket:id="cb-label" ></label>
+        </wicket:fragment>
+        <wicket:fragment wicket:id="dropdown">
+            <select wicket:id="fragment"></select>
         </wicket:fragment>
     </wicket:panel>
 </html>

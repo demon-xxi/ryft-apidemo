@@ -25,14 +25,15 @@ import org.apache.wicket.validation.validator.RangeValidator;
 import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 import com.metasys.ryft.Configuration;
 import com.metasys.ryft.Query;
+import com.metasys.ryft.Query.TermFormat;
 import com.metasys.ryft.Result;
 import com.metasys.ryft.web.component.DemoForm;
+import com.metasys.ryft.web.component.DropDown;
 import com.metasys.ryft.web.component.ExecuteButton;
 import com.metasys.ryft.web.component.FormComponentPanel;
 import com.metasys.ryft.web.component.ResultPanel;
 import com.metasys.ryft.web.validator.ConditionalRequired;
 import com.metasys.ryft.web.validator.Required;
-import com.metasys.ryft.web.validator.TermFormatValidator;
 
 /**
  * Wicket page for the
@@ -75,6 +76,7 @@ public class DemoPage extends WebPage implements IAjaxIndicatorAware {
     private static final String TERM = Query.TERM;
     private static final String TERM_FORMAT = TERM + "Format";
     private static final String TERM_FIELD = TERM + "Field";
+    private static final String TERM_KEY = TERM + "Key";
 
     // sort
     private static final String SORT = Query.SORT;
@@ -170,10 +172,9 @@ public class DemoPage extends WebPage implements IAjaxIndicatorAware {
     }
 
     private void addTermFrequency() throws Exception {
-        conditionalRequired(addTextField(TERM_FIELD), TERM);
-        FormComponentPanel format = addTextField(TERM_FORMAT);
-        format.getFormComponent().add(new TermFormatValidator());
-        conditionalRequired(format, TERM);
+        conditionalRequired(addDropdown(TERM_FORMAT, TermFormat.values()), TERM);
+        addTextField(TERM_FIELD);
+        addTextField(TERM_KEY);
         addDoc(TERM);
         addResult(TERM);
     }
@@ -200,6 +201,12 @@ public class DemoPage extends WebPage implements IAjaxIndicatorAware {
 
     private FormComponentPanel addCheckBox(String id, Enum<?>... choices) throws Exception {
         FormComponentPanel component = new FormComponentPanel(id, CheckBox.class, this, query);
+        form.add(component);
+        return component;
+    }
+
+    private FormComponentPanel addDropdown(String id, Enum<?>... choices) throws Exception {
+        FormComponentPanel component = new FormComponentPanel(id, DropDown.class, this, query, choices);
         form.add(component);
         return component;
     }

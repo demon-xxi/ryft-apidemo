@@ -21,6 +21,7 @@ import org.junit.Test;
 
 import com.metasys.ryft.Query;
 import com.metasys.ryft.Query.SortOrder;
+import com.metasys.ryft.Query.TermFormat;
 import com.metasys.ryft.Result;
 import com.metasys.ryft.RyftException;
 import com.metasys.ryft.program.RyftPrimitives.Statistics;
@@ -52,8 +53,9 @@ public class ProgramManagerTest {
         query.setFuzzyWidth(20);
         query.setFuzziness(5);
         query.setSortField("sortField");
-        query.setTermField("termField");
-        query.setTermFormat("RAW_TEXT");
+        query.setTermFormat(TermFormat.RAW);
+        query.setTermKey("key");
+        query.setTermField("field");
         query.setNodes(2);
         new MockUp<System>() {
             @Mock
@@ -161,6 +163,22 @@ public class ProgramManagerTest {
     @Test
     public void testGenerateTermFrequency() throws Exception {
         generateProgram(Query.TERM);
+    }
+
+    @Test
+    public void testGenerateRecordTermFrequency() throws Exception {
+        query.setType(Query.TERM);
+        query.setTermFormat(TermFormat.RECORD);
+        pm.generate(query, "term_record");
+        assertProgram("term_record");
+    }
+
+    @Test
+    public void testGenerateFieldTermFrequency() throws Exception {
+        query.setType(Query.TERM);
+        query.setTermFormat(TermFormat.FIELD);
+        pm.generate(query, "term_field");
+        assertProgram("term_field");
     }
 
     @Test

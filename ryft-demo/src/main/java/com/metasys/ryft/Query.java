@@ -26,6 +26,10 @@ public class Query implements Serializable {
         ASC, DESC;
     }
 
+    public enum TermFormat {
+        RAW, RECORD, FIELD;
+    }
+
     private String id;
     private String type;
     private String input;
@@ -44,8 +48,9 @@ public class Query implements Serializable {
     private SortOrder sortOrder;
     private boolean sortDescending;
 
-    private String termFormat;
+    private TermFormat termFormat;
     private String termField;
+    private String termKey;
 
     private int outputIndex;
 
@@ -76,8 +81,14 @@ public class Query implements Serializable {
                 }
                 break;
             case TERM:
-                if (termField == null || termFormat == null) {
-                    throw new RyftException("Both the field and format must be specified for a term frequency query");
+                if (termFormat == null) {
+                    throw new RyftException("The term frequency format must be specified");
+                }
+                if (TermFormat.RECORD == termFormat && termKey == null) {
+                    throw new RyftException("The key field name must be specified for a record-based term frequency");
+                }
+                if (TermFormat.FIELD == termFormat && (termKey == null || termField == null)) {
+                    throw new RyftException("The field and key field name must be specified for a field-based term frequency");
                 }
                 break;
             case SORT:
@@ -217,11 +228,11 @@ public class Query implements Serializable {
         this.sortDescending = sortDescending;
     }
 
-    public String getTermFormat() {
+    public TermFormat getTermFormat() {
         return termFormat;
     }
 
-    public void setTermFormat(String termFormat) {
+    public void setTermFormat(TermFormat termFormat) {
         this.termFormat = termFormat;
     }
 
@@ -231,6 +242,14 @@ public class Query implements Serializable {
 
     public void setTermField(String termField) {
         this.termField = termField;
+    }
+
+    public String getTermKey() {
+        return termKey;
+    }
+
+    public void setTermKey(String termKey) {
+        this.termKey = termKey;
     }
 
     @Override

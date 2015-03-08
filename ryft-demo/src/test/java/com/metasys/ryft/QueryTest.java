@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.metasys.ryft.Query.SortOrder;
+import com.metasys.ryft.Query.TermFormat;
 
 public class QueryTest {
 
@@ -101,7 +102,7 @@ public class QueryTest {
     }
 
     @Test
-    public void testValidateTerm() throws RyftException {
+    public void testValidateRawTerm() throws RyftException {
         Query query = new Query();
         query.setType("term");
         query.setInput("input");
@@ -109,16 +110,60 @@ public class QueryTest {
             query.validate();
             Assert.fail();
         } catch (RyftException e) {
-            Assert.assertEquals("Both the field and format must be specified for a term frequency query", e.getMessage());
+            Assert.assertEquals("The term frequency format must be specified", e.getMessage());
         }
-        query.setTermField("field");
+        query.setTermFormat(TermFormat.RAW);
+        query.validate();
+    }
+
+    @Test
+    public void testValidateRecordTerm() throws RyftException {
+        Query query = new Query();
+        query.setType("term");
+        query.setInput("input");
         try {
             query.validate();
             Assert.fail();
         } catch (RyftException e) {
-            Assert.assertEquals("Both the field and format must be specified for a term frequency query", e.getMessage());
+            Assert.assertEquals("The term frequency format must be specified", e.getMessage());
         }
-        query.setTermFormat("format");
+        query.setTermFormat(TermFormat.RECORD);
+        try {
+            query.validate();
+            Assert.fail();
+        } catch (RyftException e) {
+            Assert.assertEquals("The key field name must be specified for a record-based term frequency", e.getMessage());
+        }
+        query.setTermKey("key");
+        query.validate();
+    }
+
+    @Test
+    public void testValidateFieldTerm() throws RyftException {
+        Query query = new Query();
+        query.setType("term");
+        query.setInput("input");
+        try {
+            query.validate();
+            Assert.fail();
+        } catch (RyftException e) {
+            Assert.assertEquals("The term frequency format must be specified", e.getMessage());
+        }
+        query.setTermFormat(TermFormat.FIELD);
+        try {
+            query.validate();
+            Assert.fail();
+        } catch (RyftException e) {
+            Assert.assertEquals("The field and key field name must be specified for a field-based term frequency", e.getMessage());
+        }
+        query.setTermKey("key");
+        try {
+            query.validate();
+            Assert.fail();
+        } catch (RyftException e) {
+            Assert.assertEquals("The field and key field name must be specified for a field-based term frequency", e.getMessage());
+        }
+        query.setTermField("field");
         query.validate();
     }
 

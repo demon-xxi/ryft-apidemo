@@ -42,6 +42,7 @@ public class FormComponentPanel extends Panel {
     private static final String TEXT_FRAGMENT = "text";
     private static final String HIDDEN_FRAGMENT = "hidden";
     private static final String SPAN_FRAGMENT = "span";
+    private static final String DROPDOWN_FRAGMENT = "dropdown";
     private static final String CHECKBOX_FRAGMENT = "checkbox";
     private static final String CHECKBOX_LABEL_ID = "cb-label";
 
@@ -98,6 +99,9 @@ public class FormComponentPanel extends Panel {
             fragmentName = HIDDEN_FRAGMENT;
         } else if (formComponent instanceof TextField) {
             fragmentName = TEXT_INPUT_FRAGMENT;
+        } else if (formComponent instanceof DropDown) {
+            fragmentName = DROPDOWN_FRAGMENT;
+            ((DropDown) formComponent).setNullKey(id + ".null");
         }
 
         Fragment fragment = new Fragment(FIELD_ID, fragmentName, this);
