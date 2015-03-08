@@ -95,8 +95,9 @@ public class ProgramManager {
             RyftPrimitives.writeData(program, query.getOutput());
             if (query.isWriteIndex() && (Query.SEARCH.equals(query.getType()) || Query.FUZZY.equals(query.getType()))) {
                 StringBuilder index = new StringBuilder();
-                if (output.getParent() != null) {
-                    index.append(output.getParent()).append('/');
+                String outputFolder = new File(query.getOutput()).getParent();
+                if (outputFolder != null) {
+                    index.append(outputFolder).append('/');
                 }
                 index.append(INDEX_PREFIX).append(output.getName());
                 RyftPrimitives.writeIndex(program, index.toString());
