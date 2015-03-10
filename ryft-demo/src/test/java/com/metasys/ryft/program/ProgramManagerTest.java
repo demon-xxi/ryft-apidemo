@@ -136,6 +136,14 @@ public class ProgramManagerTest {
     }
 
     @Test
+    public void testGenerateSearchDelimiter() throws Exception {
+        query.setType(Query.SEARCH);
+        query.setSearchDelimiter("del");
+        pm.generate(query, "search_delimiter");
+        assertProgram("search_delimiter");
+    }
+
+    @Test
     public void testGenerateFuzzySearch() throws Exception {
         generateProgram(Query.FUZZY);
     }
@@ -144,6 +152,14 @@ public class ProgramManagerTest {
     public void testGenerateFuzzySearchNoIdentifier() throws Exception {
         query.setFuzzyQuery("something");
         generateProgram(Query.FUZZY);
+    }
+
+    @Test
+    public void testGenerateFuzzyDelimiter() throws Exception {
+        query.setType(Query.FUZZY);
+        query.setFuzzyDelimiter("del");
+        pm.generate(query, "fuzzy_delimiter");
+        assertProgram("fuzzy_delimiter");
     }
 
     @Test

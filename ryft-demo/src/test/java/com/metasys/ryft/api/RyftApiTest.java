@@ -32,6 +32,7 @@ public class RyftApiTest {
         query.setType(Query.SEARCH);
         query.setSearchQuery("(RAW_TEXT CONTAINS \"something\")");
         query.setSearchWidth(20);
+        query.setSearchDelimiter(",");
         query.setNodes(2);
         new MockUp<System>() {
             @Mock

@@ -77,10 +77,11 @@ public class ProgramManager {
 
             switch (query.getType()) {
                 case Query.SEARCH:
-                    RyftPrimitives.search(program, query.getSearchQuery(), query.getSearchWidth());
+                    RyftPrimitives.search(program, query.getSearchQuery(), query.getSearchWidth(), query.getSearchDelimiter());
                     break;
                 case Query.FUZZY:
-                    RyftPrimitives.fuzzySearch(program, query.getFuzzyQuery(), query.getFuzzyWidth(), query.getFuzziness());
+                    RyftPrimitives
+                            .fuzzySearch(program, query.getFuzzyQuery(), query.getFuzzyWidth(), query.getFuzziness(), query.getFuzzyDelimiter());
                     break;
                 case Query.TERM:
                     RyftPrimitives.termFrequency(program, query.getTermFormat(), query.getTermField(), query.getTermKey());

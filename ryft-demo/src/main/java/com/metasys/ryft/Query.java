@@ -21,6 +21,7 @@ public class Query implements Serializable {
 
     private static final int DEFAULT_NODES = 1;
     private static final String DEFAULT_OUTPUT = "demo/output_";
+    private static final String DEFAULT_DELIMITER = "\\r\\n";
 
     public enum SortOrder {
         ASC, DESC;
@@ -39,10 +40,12 @@ public class Query implements Serializable {
 
     private String searchQuery;
     private Integer searchWidth;
+    private String searchDelimiter;
 
     private String fuzzyQuery;
     private Integer fuzzyWidth;
     private Integer fuzziness;
+    private String fuzzyDelimiter;
 
     private String sortField;
     private SortOrder sortOrder;
@@ -74,10 +77,16 @@ public class Query implements Serializable {
                 if (searchQuery == null || searchWidth == null) {
                     throw new RyftException("Both the query string and surrounding width must be specified for a search query");
                 }
+                if (searchDelimiter == null) {
+                    searchDelimiter = DEFAULT_DELIMITER;
+                }
                 break;
             case FUZZY:
                 if (fuzzyQuery == null || fuzzyWidth == null || fuzziness == null) {
                     throw new RyftException("The query string, surrounding width and fuzziness must be specified for a fuzzy search query");
+                }
+                if (fuzzyDelimiter == null) {
+                    fuzzyDelimiter = DEFAULT_DELIMITER;
                 }
                 break;
             case TERM:
@@ -180,6 +189,14 @@ public class Query implements Serializable {
         this.searchWidth = searchWidth;
     }
 
+    public String getSearchDelimiter() {
+        return searchDelimiter;
+    }
+
+    public void setSearchDelimiter(String searchDelimiter) {
+        this.searchDelimiter = searchDelimiter;
+    }
+
     public String getFuzzyQuery() {
         return fuzzyQuery;
     }
@@ -202,6 +219,14 @@ public class Query implements Serializable {
 
     public void setFuzziness(Integer fuzziness) {
         this.fuzziness = fuzziness;
+    }
+
+    public String getFuzzyDelimiter() {
+        return fuzzyDelimiter;
+    }
+
+    public void setFuzzyDelimiter(String fuzzyDelimiter) {
+        this.fuzzyDelimiter = fuzzyDelimiter;
     }
 
     public String getSortField() {
@@ -255,29 +280,33 @@ public class Query implements Serializable {
     @Override
     public String toString() {
         return "Query [id=" + id + ", type=" + type + ", input=" + input + ", output=" + output + ", writeIndex=" + writeIndex + ", nodes=" + nodes
-                + ", searchQuery=" + searchQuery + ", searchWidth=" + searchWidth + ", fuzzyQuery=" + fuzzyQuery + ", fuzzyWidth=" + fuzzyWidth
-                + ", fuzziness=" + fuzziness + ", sortField=" + sortField + ", sortOrder=" + sortOrder + ", sortDescending=" + sortDescending
-                + ", termFormat=" + termFormat + ", termField=" + termField + "]";
+                + ", searchQuery=" + searchQuery + ", searchWidth=" + searchWidth + ", searchDelimiter=" + searchDelimiter + ", fuzzyQuery="
+                + fuzzyQuery + ", fuzzyWidth=" + fuzzyWidth + ", fuzziness=" + fuzziness + ", fuzzyDelimiter=" + fuzzyDelimiter + ", sortField="
+                + sortField + ", sortOrder=" + sortOrder + ", sortDescending=" + sortDescending + ", termFormat=" + termFormat + ", termField="
+                + termField + ", termKey=" + termKey + ", outputIndex=" + outputIndex + "]";
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (sortDescending ? 1231 : 1237);
         result = prime * result + (fuzziness == null ? 0 : fuzziness.hashCode());
+        result = prime * result + (fuzzyDelimiter == null ? 0 : fuzzyDelimiter.hashCode());
         result = prime * result + (fuzzyQuery == null ? 0 : fuzzyQuery.hashCode());
         result = prime * result + (fuzzyWidth == null ? 0 : fuzzyWidth.hashCode());
         result = prime * result + (id == null ? 0 : id.hashCode());
         result = prime * result + (input == null ? 0 : input.hashCode());
         result = prime * result + (nodes == null ? 0 : nodes.hashCode());
         result = prime * result + (output == null ? 0 : output.hashCode());
+        result = prime * result + (searchDelimiter == null ? 0 : searchDelimiter.hashCode());
         result = prime * result + (searchQuery == null ? 0 : searchQuery.hashCode());
         result = prime * result + (searchWidth == null ? 0 : searchWidth.hashCode());
+        result = prime * result + (sortDescending ? 1231 : 1237);
         result = prime * result + (sortField == null ? 0 : sortField.hashCode());
         result = prime * result + (sortOrder == null ? 0 : sortOrder.hashCode());
         result = prime * result + (termField == null ? 0 : termField.hashCode());
         result = prime * result + (termFormat == null ? 0 : termFormat.hashCode());
+        result = prime * result + (termKey == null ? 0 : termKey.hashCode());
         result = prime * result + (type == null ? 0 : type.hashCode());
         result = prime * result + (writeIndex ? 1231 : 1237);
         return result;
@@ -295,14 +324,18 @@ public class Query implements Serializable {
             return false;
         }
         Query other = (Query) obj;
-        if (sortDescending != other.sortDescending) {
-            return false;
-        }
         if (fuzziness == null) {
             if (other.fuzziness != null) {
                 return false;
             }
         } else if (!fuzziness.equals(other.fuzziness)) {
+            return false;
+        }
+        if (fuzzyDelimiter == null) {
+            if (other.fuzzyDelimiter != null) {
+                return false;
+            }
+        } else if (!fuzzyDelimiter.equals(other.fuzzyDelimiter)) {
             return false;
         }
         if (fuzzyQuery == null) {
@@ -347,6 +380,13 @@ public class Query implements Serializable {
         } else if (!output.equals(other.output)) {
             return false;
         }
+        if (searchDelimiter == null) {
+            if (other.searchDelimiter != null) {
+                return false;
+            }
+        } else if (!searchDelimiter.equals(other.searchDelimiter)) {
+            return false;
+        }
         if (searchQuery == null) {
             if (other.searchQuery != null) {
                 return false;
@@ -359,6 +399,9 @@ public class Query implements Serializable {
                 return false;
             }
         } else if (!searchWidth.equals(other.searchWidth)) {
+            return false;
+        }
+        if (sortDescending != other.sortDescending) {
             return false;
         }
         if (sortField == null) {
@@ -378,11 +421,14 @@ public class Query implements Serializable {
         } else if (!termField.equals(other.termField)) {
             return false;
         }
-        if (termFormat == null) {
-            if (other.termFormat != null) {
+        if (termFormat != other.termFormat) {
+            return false;
+        }
+        if (termKey == null) {
+            if (other.termKey != null) {
                 return false;
             }
-        } else if (!termFormat.equals(other.termFormat)) {
+        } else if (!termKey.equals(other.termKey)) {
             return false;
         }
         if (type == null) {

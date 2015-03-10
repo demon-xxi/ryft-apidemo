@@ -6,7 +6,6 @@
 
 int main(__attribute__ ((unused))int argc, __attribute__ ((unused))char* argv[]) {
     int ret_val = 0;
-    char *strDelimiter = "\r\n";
     rol_result_t input;
     rol_result_t output;
     const char* files[] = {

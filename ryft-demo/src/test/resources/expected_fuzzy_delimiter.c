@@ -17,12 +17,18 @@ int main(__attribute__ ((unused))int argc, __attribute__ ((unused))char* argv[])
         printf("PRIERROR: %s:\n", rol_get_error_string());
         return ret_val;
     }
-    ret_val = rol_record_based_term_frequency(&output, &input, "key");
+    char *strDelimiter = "del";
+    ret_val = rol_search_fuzzy(&output, &input, "(RAW_TEXT CONTAINS \"something\")", 20, 5, strDelimiter);
     if (ret_val != 0) {
         printf("PRIERROR: %s:\n", rol_get_error_string());
         return ret_val;
     }
     ret_val = rol_set_data_results_file(&output, "results.txt");
+    if (ret_val != 0) {
+        printf("PRIERROR: %s:\n", rol_get_error_string());
+        return ret_val;
+    }
+    ret_val = rol_set_index_results_file(&output, "index_results.txt");
     if (ret_val != 0) {
         printf("PRIERROR: %s:\n", rol_get_error_string());
         return ret_val;
@@ -41,8 +47,8 @@ int main(__attribute__ ((unused))int argc, __attribute__ ((unused))char* argv[])
     uint64_t bytes;
     rol_get_statistics(&output, "TOTAL_BYTES_PROCESSED", &bytes);
     printf("STATS: TOTAL_BYTES_PROCESSED: %"PRIu64"\n", bytes);
-    uint64_t terms;
-    rol_get_statistics(&output, "NUMBER_OF_TERMS", &terms);
-    printf("STATS: NUMBER_OF_TERMS: %"PRIu64"\n", terms);
+    uint64_t matches;
+    rol_get_statistics(&output, "TOTAL_NUMBER_OF_MATCHES", &matches);
+    printf("STATS: TOTAL_NUMBER_OF_MATCHES: %"PRIu64"\n", matches);
     return ret_val;
 }

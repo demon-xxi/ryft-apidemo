@@ -65,12 +65,14 @@ public class DemoPage extends WebPage implements IAjaxIndicatorAware {
     private static final String SEARCH = Query.SEARCH;
     private static final String SEARCH_QUERY = SEARCH + "Query";
     private static final String SEARCH_WIDTH = SEARCH + "Width";
+    private static final String SEARCH_DELIMITER = SEARCH + "Delimiter";
 
     // fuzzy search
     private static final String FUZZY = Query.FUZZY;
     private static final String FUZZY_QUERY = FUZZY + "Query";
     private static final String FUZZY_WIDTH = FUZZY + "Width";
     private static final String FUZZYNESS = "fuzziness";
+    private static final String FUZZY_DELIMITER = FUZZY + "Delimiter";
 
     // term frequency
     private static final String TERM = Query.TERM;
@@ -87,7 +89,7 @@ public class DemoPage extends WebPage implements IAjaxIndicatorAware {
 
     // CSS to load for jQuery and Kendo
     private static final String[] KENDO_CSS = new String[] { "css/smoothness/jquery-ui.min.css", "css/kendo/kendo.common.min.css",
-    "css/kendo/kendo.default.min.css" };
+            "css/kendo/kendo.default.min.css" };
 
     // Holder of feedback keys already rendered to avoid duplicated messages for form components having their own embedded error messages
     public static final MetaDataKey<Boolean> IGNORE_FEEDBACK = new MetaDataKey<Boolean>() {
@@ -155,6 +157,7 @@ public class DemoPage extends WebPage implements IAjaxIndicatorAware {
         FormComponentPanel width = addTextField(SEARCH_WIDTH);
         width.getFormComponent().add(RangeValidator.minimum(0));
         conditionalRequired(width, SEARCH);
+        addTextField(SEARCH_DELIMITER);
         addDoc(SEARCH);
         addResult(SEARCH);
     }
@@ -167,6 +170,7 @@ public class DemoPage extends WebPage implements IAjaxIndicatorAware {
         FormComponentPanel fuzziness = addTextField(FUZZYNESS);
         fuzziness.getFormComponent().add(RangeValidator.minimum(0));
         conditionalRequired(fuzziness, FUZZY);
+        addTextField(FUZZY_DELIMITER);
         addDoc(FUZZY);
         addResult(FUZZY);
     }

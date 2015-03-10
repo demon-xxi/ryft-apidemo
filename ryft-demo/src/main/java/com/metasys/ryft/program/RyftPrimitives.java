@@ -58,7 +58,6 @@ public final class RyftPrimitives {
         program.append("#include <libryftone.h>").newLine();
         program.append("int main(__attribute__ ((unused))int argc, __attribute__ ((unused))char* argv[]) {");
         program.append("int ret_val = 0;", 1);
-        program.append("char *strDelimiter = \"\\r\\n\";", 1);
         program.append("rol_result_t input;", 1);
         program.append("rol_result_t output;", 1);
     }
@@ -80,12 +79,15 @@ public final class RyftPrimitives {
         wrapPrimitive(program, "rol_set_data_results_file(&output, \"" + file + "\")");
     }
 
-    protected static void search(ProgramWriter program, String searchString, int width) throws RyftException {
+    protected static void search(ProgramWriter program, String searchString, int width, String delimiter) throws RyftException {
+        program.append("char *strDelimiter = \"" + delimiter + "\";", 1);
         wrapPrimitive(program, "rol_search_exact(&output, &input, \"" + checkSearchExpression(searchString) + "\", " + width + ", strDelimiter)");
     }
 
-    protected static void fuzzySearch(ProgramWriter program, String searchString, int width, int fuzziness) throws RyftException {
-        wrapPrimitive(program, "rol_search_fuzzy(&output, &input, \"" + checkSearchExpression(searchString) + "\", " + width + ", " + fuzziness + ", strDelimiter)");
+    protected static void fuzzySearch(ProgramWriter program, String searchString, int width, int fuzziness, String delimiter) throws RyftException {
+        program.append("char *strDelimiter = \"" + delimiter + "\";", 1);
+        wrapPrimitive(program, "rol_search_fuzzy(&output, &input, \"" + checkSearchExpression(searchString) + "\", " + width + ", " + fuzziness
+                + ", strDelimiter)");
     }
 
     protected static void sort(ProgramWriter program, String field, SortOrder order) throws RyftException {
