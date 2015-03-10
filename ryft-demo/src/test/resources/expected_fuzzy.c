@@ -6,6 +6,7 @@
 
 int main(__attribute__ ((unused))int argc, __attribute__ ((unused))char* argv[]) {
     int ret_val = 0;
+    char *strDelimiter = "\r\n";
     rol_result_t input;
     rol_result_t output;
     const char* files[] = {
@@ -17,7 +18,7 @@ int main(__attribute__ ((unused))int argc, __attribute__ ((unused))char* argv[])
         printf("PRIERROR: %s:\n", rol_get_error_string());
         return ret_val;
     }
-    ret_val = rol_search_fuzzy(&output, &input, "(RAW_TEXT CONTAINS \"something\")", 20, 5);
+    ret_val = rol_search_fuzzy(&output, &input, "(RAW_TEXT CONTAINS \"something\")", 20, 5, strDelimiter);
     if (ret_val != 0) {
         printf("PRIERROR: %s:\n", rol_get_error_string());
         return ret_val;
