@@ -80,12 +80,12 @@ public final class RyftPrimitives {
     }
 
     protected static void search(ProgramWriter program, String searchString, int width, String delimiter) throws RyftException {
-        program.append("char *strDelimiter = \"" + delimiter + "\";", 1);
+        program.append("const char *strDelimiter = \"" + delimiter + "\";", 1);
         wrapPrimitive(program, "rol_search_exact(&output, &input, \"" + checkSearchExpression(searchString) + "\", " + width + ", strDelimiter)");
     }
 
     protected static void fuzzySearch(ProgramWriter program, String searchString, int width, int fuzziness, String delimiter) throws RyftException {
-        program.append("char *strDelimiter = \"" + delimiter + "\";", 1);
+        program.append("const char *strDelimiter = \"" + delimiter + "\";", 1);
         wrapPrimitive(program, "rol_search_fuzzy(&output, &input, \"" + checkSearchExpression(searchString) + "\", " + width + ", " + fuzziness
                 + ", strDelimiter)");
     }
