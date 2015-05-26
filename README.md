@@ -4,7 +4,7 @@ This project is a Web Interface and REST API to demonstrate the capabilities of 
 
 ### Using the Install script
 
-    curl -u 'your github username' -H 'Accept: application/vnd.github.v3.raw' -L https://api.github.com/repos/getryft/apidemo/contents/ryft-demo/bin/install.sh | sh
+    curl -u 'your github username' -H 'Accept: application/vnd.github.v3.raw' -L https://api.github.com/repos/getryft/ryft-apidemo/contents/ryft-demo/bin/install.sh | sh
     sudo service ryft-demo start
     
 The script will automatically:
@@ -15,7 +15,7 @@ The script will automatically:
 
 To avoid the password prompt when downloading the script, you can create an access token following [these instructions][13] and the use the following curl command:
 
-    curl -H 'Authorization: token INSERTYOURTOKEN' -H 'Accept: application/vnd.github.v3.raw' -L https://api.github.com/repos/getryft/apidemo/contents/ryft-demo/bin/install.sh | sh
+    curl -H 'Authorization: token INSERTYOURTOKEN' -H 'Accept: application/vnd.github.v3.raw' -L https://api.github.com/repos/getryft/ryft-apidemo/contents/ryft-demo/bin/install.sh | sh
 
 ### Manually
 
@@ -40,11 +40,11 @@ Get Maven:
     
 Clone the repository:
 
-    git clone https://github.com/getryft/apidemo.git
+    git clone https://github.com/getryft/ryft-apidemo.git
     
 Build:
 
-    cd apidemo/ryft-demo
+    cd ryft-apidemo/ryft-demo
     mvn package -DskipTests
 
 Deploy:
@@ -186,7 +186,7 @@ Download and install the latest [JDK][1]. The project requires at least Java 7.
 Install [Git][2]
 Then you can clone the repository:
 
-    git clone https://github.com/getryft/apidemo.git
+    git clone https://github.com/getryft/ryft-apidemo.git
 
 #### Maven
 Download [Maven][3] (at least Maven 3.0), extract and add the bin folder to your path.
