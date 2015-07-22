@@ -8,7 +8,7 @@ This project is a Web Interface and REST API to demonstrate the capabilities of 
     sudo service ryft-demo start
     
 The script will automatically:
-* install Git, Java and Maven if they are not already installed
+* install Git, and Maven if they are not already installed
 * Clone the repository or pull the latest changes (if SSH keys are not configured, it will prompt for username/password)
 * Compile and install under /opt
 * Set-up upstart
@@ -22,15 +22,6 @@ To avoid the password prompt when downloading the script, you can create an acce
 Install git:
 
     sudo apt-get install git
-
-Install Java:
-
-    wget --no-check-certificate -c --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u25-b17/jdk-8u25-linux-x64.tar.gz
-    tar -xzf jdk-8u25-linux-x64.tar.gz
-    sudo mkdir -p /usr/lib/jvm
-    sudo mv jdk1.8.0_25 /usr/lib/jvm
-    sudo update-alternatives --install "/usr/bin/java" "java" "/usr/lib/jvm/jdk1.8.0_25/bin/java" 2000
-    rm -f jdk-8u25-linux-x64.tar.gz
 
 Get Maven:
 
@@ -166,7 +157,7 @@ The Ryft API response contains the path to the output and index files, which can
 
 Example:
 
-    GET /file?file=/demo_output_1422492832169
+    GET /api/file?file=/demo_output_1422492832169
     
 All file paths will start by '/', it doesn' denote the root of the fily system where the server is running, but the root of the Ryft file system, which can be anywhere on the server's file system.
 
@@ -177,10 +168,10 @@ This API also exposes a /file/browse end point used by the server-side file brow
 
 ### Requirements
 
-Java, Git, Maven and your IDE of choice. 
+Java (openjdk-7), Git, Maven and your IDE of choice. 
 
 #### Java
-Download and install the latest [JDK][1]. The project requires at least Java 7.
+Download and install the latest [JDK][1]. The project requires at least Java 7. On a typical Ryft system, packages openjdk-7-jre and openjdk-7-jdk are pre-installed.
 
 #### Git
 Install [Git][2]
@@ -188,8 +179,10 @@ Then you can clone the repository:
 
     git clone https://github.com/getryft/ryft-apidemo.git
 
+On a typical Ryft system, git is pre-installed.
+
 #### Maven
-Download [Maven][3] (at least Maven 3.0), extract and add the bin folder to your path.
+Download [Apache Maven][3] (at least Maven 3.0), extract and add the bin folder to your path. On a typical Ryft system, Maven is preinstalled.
 
 #### Eclipse
 If you don't already have an IDE, you can download [Eclipse IDE for Java Developers][4], it comes with Maven and Git plugins. 
@@ -197,7 +190,7 @@ If you don't already have an IDE, you can download [Eclipse IDE for Java Develop
 
 ### Import the project in Eclipse
 
-In Eclipse, use the "Import existing Maven projects" (File -> Import -> Maven) to create the project. Maven will take care of properly setting up the classpath and downloading all the required dependencies.
+If you are an Eclipse user, use the "Import existing Maven projects" (File -> Import -> Maven) to create the project. Maven will take care of properly setting up the classpath and downloading all the required dependencies.
 The entry point is com.metasys.ryft.DemoApplication and will by default start an embedded Jetty server on port 8989. 
 
 
@@ -251,7 +244,7 @@ Each call is assigned an ID by the API, which is used as the name of the working
 
 ### Packaging and Maven
 
-All the dependencies are manages with Maven. On top of Spring, Wicket and Jetty the project also relies on 
+All the dependencies are managed with Maven. On top of Spring, Wicket and Jetty the project also relies on 
 * commons-lang and commons-io for convenience
 * [Jackson][9] to read/write JSON objects
 * [Log4j2][10] for logging
@@ -265,13 +258,13 @@ And finally the assembly.xml describes how to build a tar.gz file with everythin
 * conf with the log4j2.xml and ryft.properties file so they can easily be modified
 
 
-[1]: http://www.oracle.com/technetwork/articles/javase/index-jsp-138363.html
+[1]: http://openjdk.java.net/
 [2]: http://git-scm.com/book/en/v2/Getting-Started-Installing-Git
 [3]: http://maven.apache.org/download.cgi
 [4]: https://www.eclipse.org/downloads/
 [5]: http://spring.io/
 [6]: https://wicket.apache.org/
-[7]: https://github.com/getryft/apidemo/blob/master/ryft-demo/doc/Ryft_ONE_Library_API_Users_Guide.pdf
+[7]: http://www.ryft.com/api/
 [8]: http://www.7thweb.net/wicket-jquery-ui/
 [9]: http://wiki.fasterxml.com/JacksonHome
 [10]: http://logging.apache.org/log4j/2.x/
