@@ -5,13 +5,12 @@ This project is a Web Interface and REST API to demonstrate the capabilities of 
 ### Using the Install script
 
     curl -u 'your github username' -H 'Accept: application/vnd.github.v3.raw' -L https://api.github.com/repos/getryft/ryft-apidemo/contents/ryft-demo/bin/install.sh | sh
-    sudo service ryft-demo start
     
 The script will automatically:
-* install Git, and Maven if they are not already installed
+* install Git and Maven if they are not already installed
 * Clone the repository or pull the latest changes (if SSH keys are not configured, it will prompt for username/password)
 * Compile and install under /opt
-* Set-up upstart
+* Set up the /etc/init.d script and start the ryftwebapidemo service 
 
 To avoid the password prompt when downloading the script, you can create an access token following [these instructions][13] and the use the following curl command:
 
@@ -51,15 +50,11 @@ Start the server:
 
 Open a browser on port 8989 of your server. 
 
-Once this has been done once, to quicky re-deploy with the latest changes from Git, run from the 'apidemo' folder 
-
-    ./ryft-demo/bin/redeploy.sh
-
 ### Configuration
 
-The ryft.properties contains details on each property to configure. There are at least 2 values that should be updated:
-* ryft.fs.root for the root of the Ryft file system where input and output files are
-* ryft.workingDir for the working directories where C program will be generated
+The ryft.properties contains details on each property to configure. There are at least 2 values that may need to be updated:
+* ryft.fs.root for the root of the Ryft file system where input and output files are. Note that the Ryft file system by default is mounted at /ryftone, so unless your system configuration has changed, that's the value that should be used.
+* ryft.workingDir for the working directories where the apidemo will generate intermediary files, such as generated C programs.
 
 ### Logs
 
@@ -168,10 +163,10 @@ This API also exposes a /file/browse end point used by the server-side file brow
 
 ### Requirements
 
-Java (openjdk-7), Git, Maven and your IDE of choice. 
+Java, Git, Maven and your IDE of choice. 
 
 #### Java
-Download and install the latest [JDK][1]. The project requires at least Java 7. On a typical Ryft system, packages openjdk-7-jre and openjdk-7-jdk are pre-installed.
+Download and install your favorite JDK (note that the project requires at least Java 7). Ryft recommends openjdk-7 [JDK][1]. On a typical Ryft system, packages openjdk-7-jre and openjdk-7-jdk are pre-installed.
 
 #### Git
 Install [Git][2]
