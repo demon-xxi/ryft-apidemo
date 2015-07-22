@@ -130,7 +130,7 @@ public class ProgramManager {
     }
 
     public int execute(String id) throws RyftException {
-        int res = exec(id, "ssh localhost 'cd " + workingDirectory(id).getAbsolutePath() + " ; ./ryft_demo'");
+        int res = exec(id, "cd " + workingDirectory(id).getAbsolutePath() + " ; ./ryft_demo");
         if (res != 0) {
             String log = readLog(id);
             if (log != null) {

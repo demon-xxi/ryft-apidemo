@@ -307,7 +307,7 @@ public class ProgramManagerTest {
     public void testExecute() throws Exception {
         new StrictExpectations() {
             {
-                new ProcessBuilder("/bin/sh", "-c", "ssh localhost 'cd " + workDir.getAbsolutePath() + " ; ./ryft_demo'");
+                new ProcessBuilder("/bin/sh", "-c", "cd " + workDir.getAbsolutePath() + " ; ./ryft_demo");
                 result = processBuilder;
                 processBuilder.directory(workDir);
                 result = processBuilder;
@@ -328,7 +328,7 @@ public class ProgramManagerTest {
     public void testExecuteError() throws Exception {
         new StrictExpectations() {
             {
-                new ProcessBuilder("/bin/sh", "-c", "ssh localhost 'cd " + workDir.getAbsolutePath() + " ; ./ryft_demo'");
+                new ProcessBuilder("/bin/sh", "-c", "cd " + workDir.getAbsolutePath() + " ; ./ryft_demo");
                 result = processBuilder;
                 processBuilder.directory(workDir);
                 result = processBuilder;
@@ -350,7 +350,7 @@ public class ProgramManagerTest {
         workDir = new File("target/c/log");
         new StrictExpectations() {
             {
-                new ProcessBuilder("/bin/sh", "-c", "ssh localhost 'cd " + workDir.getAbsolutePath() + " ; ./ryft_demo'");
+                new ProcessBuilder("/bin/sh", "-c", "cd " + workDir.getAbsolutePath() + " ; ./ryft_demo");
                 result = processBuilder;
                 processBuilder.directory(workDir);
                 result = processBuilder;
@@ -385,7 +385,7 @@ public class ProgramManagerTest {
     public void testExecuteException() throws Exception {
         new StrictExpectations() {
             {
-                new ProcessBuilder("/bin/sh", "-c", "ssh localhost 'cd " + workDir.getAbsolutePath() + " ; ./ryft_demo'");
+                new ProcessBuilder("/bin/sh", "-c", "cd " + workDir.getAbsolutePath() + " ; ./ryft_demo");
                 result = processBuilder;
                 processBuilder.directory(workDir);
                 result = processBuilder;

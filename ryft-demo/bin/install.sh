@@ -1,118 +1,137 @@
 #!/bin/bash
 
+aiusername=$(whoami)
+
+# mark the start time
+STARTTIMEAPI=$(date +%s)
+
+echo ""
+
+echo '---'
+echo 'Installing Ryft ONE API web demo'
+echo '---'
+
+echo ""
+
 # Target install directory
-target=${1-/opt}
+target=/opt
 shift
-# User running the site
-user=${1-ryft}
 
 # Versions
 ryft_version=1.0-SNAPSHOT
-jdk8_version=25
-jdk_build_version=17
 mvn_version=3.2.5
 
-echo "### Checking Ryft User"
-id ${user} > /dev/null 2>&1
-if [ $? -eq 0 ]; then
-    echo "  --> OK"
-else
-    sudo useradd -m -s /bin/bash -U ${user}
-    sudo usermod -a -G ${user} ${user}
-    sudo su -c "ssh-keygen -t dsa -P '' -f ~/.ssh/id_dsa" ${user}
-    sudo su -c "cat ~/.ssh/id_dsa.pub >> ~/.ssh/authorized_keys" ${user}
-    sudo su -c "chmod 755 ~/.ssh/" ${user}
-    sudo su -c "chmod 600 ~/.ssh/authorized_keys" ${user}
-    sudo su -c 'ssh -o "StrictHostKeyChecking no" localhost "id"' ${user}
-fi
+echo '---'
+echo 'Checking git'
+echo '---'
 
-echo "### Checking Git"
+echo ""
+
 git --version > /dev/null 2>&1
-if [ $? -eq 0 ]; then
-    echo "  --> OK"
-else
-    echo "### Installing Git"
+if [ $? -ne 0 ]; then
+    echo '---'
+    echo 'Installing git'
+    echo '---'
+
+    echo ""
+
     sudo apt-get install -y git
     git --version
     if [ $? -ne 0 ]; then
         echo "Error installing Git"
         exit 1
     fi
-    echo "  --> OK"
 fi
+echo "  --> OK"
 
-echo "### Checking Java"
-java -version > /dev/null 2>&1
-if [ $? -eq 0 ]; then
-    echo "  --> OK"
-else
-    echo "### Installing Java"
-    wget --no-check-certificate -c --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u${jdk8_version}-b${jdk_build_version}/jdk-8u${jdk8_version}-linux-x64.tar.gz
-    tar -xzf jdk-8u${jdk8_version}-linux-x64.tar.gz
-    sudo mkdir -p /usr/lib/jvm
-    sudo mv jdk1.8.0_${jdk8_version} /usr/lib/jvm
-    sudo update-alternatives --install "/usr/bin/java" "java" "/usr/lib/jvm/jdk1.8.0_${jdk8_version}/bin/java" 1
-    rm -f jdk-8u${jdk8_version}-linux-x64.tar.gz
-    java -version
-    if [ $? -ne 0 ]; then
-        echo "Error installing Java"
-        exit 2
-    fi
-    echo "  --> OK"
-fi
+echo ""
 
-echo "### Checking Maven"
+echo '---'
+echo 'Checking maven'
+echo '---'
+
+echo ""
+
 mvn -version > /dev/null 2>&1
-if [ $? -eq 0 ]; then
-    echo "  --> OK"
-else
-    echo "### Installing Maven"
-    wget http://apache.sunsite.ualberta.ca/maven/maven-3/${mvn_version}/binaries/apache-maven-${mvn_version}-bin.tar.gz
+if [ $? -ne 0 ]; then
+    echo '---'
+    echo 'Installing maven'
+    echo '---'
+
+    echo ""
+
+    [ ! -e ~/ryft/apache-maven-${mvn_version}-bin.tar.gz ] && wget -O ~/ryft/apache-maven-${mvn_version}-bin.tar.gz http://apache.sunsite.ualberta.ca/maven/maven-3/${mvn_version}/binaries/apache-maven-${mvn_version}-bin.tar.gz || echo "~/ryft/apache-maven-${mvn_version}-bin.tar.gz exists; it will not be refetched."
+    # wget http://apache.sunsite.ualberta.ca/maven/maven-3/${mvn_version}/binaries/apache-maven-${mvn_version}-bin.tar.gz
     sudo tar xzf apache-maven-${mvn_version}-bin.tar.gz -C /opt
     sudo update-alternatives --install "/usr/bin/mvn" "mvn" "/opt/apache-maven-${mvn_version}/bin/mvn" 1
-    rm -f apache-maven-${mvn_version}-bin.tar.gz
+    # rm -f apache-maven-${mvn_version}-bin.tar.gz
     mvn -version
     if [ $? -ne 0 ]; then
-        echo "Error installing Maven"
+        echo "*** Error installing Maven"
         exit 3
     fi
-    echo "  --> OK"
 fi
+echo "  --> OK"
+
+echo ""
 
 if [ ! -d apidemo ]; then
-    echo "### Cloning Ryft Demo Git repository"
+    echo '---'
+    echo 'Cloning Ryft ONE API web demo Git repository'
+    echo '---'
+
+    echo ""
+
     git clone https://github.com/getryft/apidemo.git
     if [ $? -ne 0 ]; then
-        echo "Error cloning Git repository"
+        echo "*** Error cloning Git repository"
         exit 4
     fi
     cd apidemo
 else 
-    echo "### Pulling latest changes from Git repository"
+    echo '---'
+    echo 'Pulling latest changes from Ryft ONE API web demo Git repository'
+    echo '---'
+
+    echo ""
+
     cd apidemo
     git pull
     if [ $? -ne 0 ]; then
-        echo "Error pulling latest changes from Git repository"
+        echo "*** Error pulling latest changes from Git repository"
         exit 4
     fi
 fi
 echo "  --> OK"
-echo "### Compiling"
+
+echo ""
+
+echo '---'
+echo 'Compiling Ryft ONE API web demo'
+echo '---'
+
+echo ""
+
 cd ryft-demo
 mvn clean package -DskipTests
 if [ $? -ne 0 ]; then
-    echo "Error building Ryft Demo project"
+    echo "*** Error building Ryft Demo project"
     exit 5
 fi
 echo "  --> OK"
 
-echo "### Installing"
+echo '---'
+echo "Installing Ryft ONE API web demo for user ${aiusername}"
+echo '---'
+
+echo ""
+
 if [ -d ${target}/ryft-demo ]; then
     cp ${target}/ryft-demo/conf/ryft.properties /tmp
 fi
 sudo rm -rf ${target}/ryft-demo-${ryft_version}
 sudo tar xzf target/ryft-demo-${ryft_version}-bin.tar.gz -C ${target}
-sudo chown -R ryft:ryft ${target}/ryft-demo-${ryft_version}
+sudo chown -R ${aiusername}:ryftone ${target}/ryft-demo-${ryft_version}
 sudo rm -f /opt/ryft-demo
 sudo ln -s ${target}/ryft-demo-${ryft_version} /opt/ryft-demo
 if [ -f /tmp/ryft.properties ]; then
@@ -120,28 +139,38 @@ if [ -f /tmp/ryft.properties ]; then
     rm -f /tmp/ryft.properties
 fi
 
-cat >/tmp/ryft-demo.conf<< EOF
-description "Ryft Demo"
+cd ~/ryft/apidemo/ryft-demo/target 
+tar xvf ryft-demo-1.0-SNAPSHOT-bin.tar.gz
 
-start on runlevel [2345]
-stop on runlevel [!2345]
-
-respawn limit 2 5
-
-limit nofile 8192 8192
-
-setuid ryft
-setgid ryft
-
-exec java -cp '${target}/ryft-demo/conf:${target}/ryft-demo/lib/*' -Xmx512m com.metasys.ryft.DemoApplication ${target}/ryft-demo/webapp
-
-EOF
-sudo cp /tmp/ryft-demo.conf /etc/init/ryft-demo.conf
-rm -f /tmp/ryft-demo.conf
-sudo ln -fs /lib/init/upstart-job /etc/init.d/ryft-demo
+sudo cp ~/ryft/apidemo/ryft-demo/bin/ryftwebapidemo-initd /etc/init.d/ryftwebapidemo
+sudo chmod 755 /etc/init.d/ryftwebapidemo
+sudo update-rc.d ryftwebapidemo defaults
 
 echo "  --> OK"
+
+echo ""
+
+# update ownership
+echo '---'
+echo "Updating ownership to ${aiusername}"
+echo '---'
+
+echo ""
+
+sudo chown -R ${aiusername} ~/ryft
+sudo chgrp -R ryftone ~/ryft
+
+echo '---'
 echo "Edit '${target}/ryft-demo/conf/ryft.properties' to configure the demo site"
-echo "Start the site running 'sudo service ryft-demo start'"
+sudo service ryftwebapidemo start
+echo "Site is started.  Stop/start/restart with 'sudo service ryftwebapidemo [start/stop/restart]'"
+echo '---'
+
+echo ""
+
+ENDTIMEAPI=$(date +%s)
+echo "The Ryft ONE API web demo installation took $(($ENDTIMEAPI - $STARTTIMEAPI)) seconds to complete."
+
+echo ""
 
 exit 0
