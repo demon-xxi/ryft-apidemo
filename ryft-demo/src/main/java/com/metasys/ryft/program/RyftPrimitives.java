@@ -81,13 +81,13 @@ public final class RyftPrimitives {
 
     protected static void search(ProgramWriter program, String searchString, int width, String delimiter) throws RyftException {
         program.append("const char *strDelimiter = \"" + delimiter + "\";", 1);
-        wrapPrimitive(program, "rol_search_exact(&output, &input, \"" + checkSearchExpression(searchString) + "\", " + width + ", strDelimiter)");
+        wrapPrimitive(program, "rol_search_exact(&output, &input, \"" + checkSearchExpression(searchString) + "\", " + width + ", true" + ", strDelimiter)");
     }
 
     protected static void fuzzySearch(ProgramWriter program, String searchString, int width, int fuzziness, String delimiter) throws RyftException {
         program.append("const char *strDelimiter = \"" + delimiter + "\";", 1);
         wrapPrimitive(program, "rol_search_fuzzy(&output, &input, \"" + checkSearchExpression(searchString) + "\", " + width + ", " + fuzziness
-                + ", strDelimiter)");
+                + ", true" + ", strDelimiter)");
     }
 
     protected static void sort(ProgramWriter program, String field, SortOrder order) throws RyftException {
