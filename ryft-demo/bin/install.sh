@@ -60,11 +60,7 @@ if [ $? -ne 0 ]; then
 
     echo ""
 
-    [ ! -e ~/ryft/apache-maven-${mvn_version}-bin.tar.gz ] && wget -O ~/ryft/apache-maven-${mvn_version}-bin.tar.gz http://apache.sunsite.ualberta.ca/maven/maven-3/${mvn_version}/binaries/apache-maven-${mvn_version}-bin.tar.gz || echo "~/ryft/apache-maven-${mvn_version}-bin.tar.gz exists; it will not be refetched."
-    # wget http://apache.sunsite.ualberta.ca/maven/maven-3/${mvn_version}/binaries/apache-maven-${mvn_version}-bin.tar.gz
-    sudo tar xzf apache-maven-${mvn_version}-bin.tar.gz -C /opt
-    sudo update-alternatives --install "/usr/bin/mvn" "mvn" "/opt/apache-maven-${mvn_version}/bin/mvn" 1
-    # rm -f apache-maven-${mvn_version}-bin.tar.gz
+    sudo apt-get install maven
     mvn -version
     if [ $? -ne 0 ]; then
         echo "*** Error installing Maven"
