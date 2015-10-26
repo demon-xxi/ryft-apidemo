@@ -33,8 +33,8 @@ public class ProgramManager {
     private static final Logger LOG = LogManager.getLogger(ProgramManager.class);
 
     // compilation instructions
-    private static final String O_COMPILATION = "/usr/bin/gcc -Wextra -g -Wall -L/usr/lib/x86_64-linux-gnu/ -c -o main.o main.c";
-    private static final String LIB_COMPILATION = "/usr/bin/gcc main.o -o ryft_demo -lryftone";
+    private static final String O_COMPILATION = "/usr/bin/g++ -Wextra -g -Wall -L/usr/lib/x86_64-linux-gnu/ -c -o main.o main.cpp";
+    private static final String LIB_COMPILATION = "/usr/bin/g++ main.o -o ryft_demo -lryftone";
 
     private static final String STD_OUT = "stdout.log";
     private static final String STD_ERR = "stderr.log";
@@ -58,7 +58,7 @@ public class ProgramManager {
 
     public void generate(Query query, String id) throws RyftException {
         File programWorkDir = workingDirectory(id);
-        LOG.debug("Generating C program for {} under {}", id, programWorkDir);
+        LOG.debug("Generating C++ program for {} under {}", id, programWorkDir);
 
         query.validate();
         File output = new File(rootFolder, query.getOutput());
@@ -70,21 +70,28 @@ public class ProgramManager {
 
         ProgramWriter program;
         try {
-            program = new ProgramWriter(new File(programWorkDir, "main.c"));
-            RyftPrimitives.initProgram(program);
+            program = new ProgramWriter(new File(programWorkDir, "main.cpp"));
+            RyftPrimitives.initProgram(program, query.getNodes());
 
-            RyftPrimitives.openFile(program, query.getInputFiles());
+            RyftPrimitives.addFile(program, query.getInputFiles());
+
+            // in our demo, we now always generate (as opposed to having the user decide whether to have one or not)
+            StringBuilder index = new StringBuilder();
+            String outputFolder = new File(query.getOutput()).getParent();
+            if (outputFolder != null) {
+                index.append(outputFolder).append('/');
+            }
+            index.append(INDEX_PREFIX).append(output.getName());
 
             switch (query.getType()) {
                 case Query.SEARCH:
-                    RyftPrimitives.search(program, query.getSearchQuery(), query.getSearchWidth(), query.getSearchDelimiter());
+                    RyftPrimitives.search(program, query.getSearchQuery(), query.getSearchWidth(), query.getOutput(), index.toString(), query.getSearchDelimiter());
                     break;
                 case Query.FUZZY:
-                    RyftPrimitives
-                            .fuzzySearch(program, query.getFuzzyQuery(), query.getFuzzyWidth(), query.getFuzziness(), query.getFuzzyDelimiter());
+                    RyftPrimitives.fuzzySearch(program, query.getFuzzyQuery(), query.getFuzzyWidth(), query.getFuzziness(), query.getOutput(), index.toString(), query.getFuzzyDelimiter());
                     break;
                 case Query.TERM:
-                    RyftPrimitives.termFrequency(program, query.getTermFormat(), query.getTermField(), query.getTermKey());
+                    RyftPrimitives.termFrequency(program, query.getTermFormat(), query.getOutput(), query.getTermField(), query.getTermKey());
                     break;
                 case Query.SORT:
                     RyftPrimitives.sort(program, query.getSortField(), query.getSortOrder());
@@ -93,17 +100,8 @@ public class ProgramManager {
                     throw new IllegalArgumentException("Unknown query type");
             }
 
-            RyftPrimitives.writeData(program, query.getOutput());
-            if (query.isWriteIndex() && (Query.SEARCH.equals(query.getType()) || Query.FUZZY.equals(query.getType()))) {
-                StringBuilder index = new StringBuilder();
-                String outputFolder = new File(query.getOutput()).getParent();
-                if (outputFolder != null) {
-                    index.append(outputFolder).append('/');
-                }
-                index.append(INDEX_PREFIX).append(output.getName());
-                RyftPrimitives.writeIndex(program, index.toString());
-            }
-            RyftPrimitives.execute(program, query.getNodes());
+            RyftPrimitives.checkError(program);
+
             if (statistics) {
                 RyftPrimitives.statistics(program, query.getType());
             }

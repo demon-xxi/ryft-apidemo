@@ -72,9 +72,7 @@ public class RyftApi {
             }
         }
         result.setOutputFile(FileBrowserApi.EXPECTED_ROOT + query.getOutput());
-        if (query.isWriteIndex() && (Query.SEARCH.equals(query.getType()) || Query.FUZZY.equals(query.getType()))) {
-            result.setIndexFile(FileBrowserApi.EXPECTED_ROOT + ProgramManager.INDEX_PREFIX + query.getOutput());
-        }
+        result.setIndexFile(FileBrowserApi.EXPECTED_ROOT + ProgramManager.INDEX_PREFIX + query.getOutput());
         LOG.debug("Result: {}", result);
         ThreadContext.remove("query-id");
         return result;
@@ -111,12 +109,10 @@ public class RyftApi {
                 }
                 fw.flush();
                 fw.close();
-                if (query.isWriteIndex()) {
-                    fw = new FileWriter(new File(output.getParentFile(), ProgramManager.INDEX_PREFIX + output.getName()));
-                    fw.write("mocked output index file content");
-                    fw.flush();
-                    fw.close();
-                }
+                fw = new FileWriter(new File(output.getParentFile(), ProgramManager.INDEX_PREFIX + output.getName()));
+                fw.write("mocked output index file content");
+                fw.flush();
+                fw.close();
             } catch (IOException e) {
                 LOG.error("Error writing mocked output", e);
             }

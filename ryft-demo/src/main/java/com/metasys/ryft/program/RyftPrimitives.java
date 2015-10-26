@@ -16,32 +16,30 @@ import com.metasys.ryft.RyftException;
  */
 public final class RyftPrimitives {
 
-    protected static final String ERROR_PREFIX = "PRIERROR: ";
+    protected static final String ERROR_PREFIX = "ERROR: ";
     protected static final String STATISTICS_PREFIX = "STATS: ";
 
     public enum Statistics {
 
         // search, term, sort
-        START_TIME("START_TIME", "uint64_t", "start", "PRIu64"),
+        START_TIME("START_TIME", "rol_ds_get_start_time(rdsOutput)", "start"),
         // search, term, sort
-        EXECUTION_DURATION("EXECUTION_DURATION", "uint64_t", "duration", "PRIu64"),
+        EXECUTION_DURATION("EXECUTION_DURATION", "rol_ds_get_execution_duration(rdsOutput)", "duration"),
         // search, term
-        TOTAL_BYTES_PROCESSED("TOTAL_BYTES_PROCESSED", "uint64_t", "bytes", "PRIu64"),
+        TOTAL_BYTES_PROCESSED("TOTAL_BYTES_PROCESSED", "rol_ds_get_total_bytes_processed(rdsOutput)", "bytes"),
         // search
-        TOTAL_NUMBER_OF_MATCHES("TOTAL_NUMBER_OF_MATCHES", "uint64_t", "matches", "PRIu64"),
+        TOTAL_NUMBER_OF_MATCHES("TOTAL_NUMBER_OF_MATCHES", "rol_ds_get_total_matches(rdsOutput)", "matches"),
         // term
-        NUMBER_OF_TERMS("NUMBER_OF_TERMS", "uint64_t", "terms", "PRIu64");
+        NUMBER_OF_TERMS("NUMBER_OF_TERMS", "rol_ds_get_total_unique_terms(rdsOutput)", "terms");
 
         private String name;
-        private String type;
+        private String call;
         private String variable;
-        private String format;
 
-        private Statistics(String name, String type, String variable, String format) {
+        private Statistics(String name, String call, String variable) {
             this.name = name;
-            this.type = type;
+            this.call = call;
             this.variable = variable;
-            this.format = format;
         }
 
     }
@@ -50,68 +48,49 @@ public final class RyftPrimitives {
         super();
     }
 
-    protected static void initProgram(ProgramWriter program) throws RyftException {
-        program.append("#define __STDC_FORMAT_MACROS");
-        program.append("#include <stdio.h>");
-        program.append("#include <inttypes.h>");
-        program.append("#include <time.h>");
-        program.append("#include <libryftone.h>").newLine();
+    protected static void initProgram(ProgramWriter program, int nodes) throws RyftException {
+        program.append("#include \"libryftone.h\"").newLine();
         program.append("int main(__attribute__ ((unused))int argc, __attribute__ ((unused))char* argv[]) {");
-        program.append("int ret_val = 0;", 1);
-        program.append("rol_result_t input;", 1);
-        program.append("rol_result_t output;", 1);
+        program.append("rol_data_set_t rdsInput = rol_ds_create_with_nodes(" + nodes + ");", 1);
     }
 
-    protected static void openFile(ProgramWriter program, String[] files) throws RyftException {
-        program.append("const char* files[] = {", 1);
+    protected static void addFile(ProgramWriter program, String[] files) throws RyftException {
         for (String file : files) {
-            program.append("\"" + file + "\",", 2);
+            program.append("rol_ds_add_file(rdsInput, \"" + file + "\");", 1);
         }
-        program.append("};", 1);
-        wrapPrimitive(program, "rol_process_files(&input, files, " + files.length + ")");
     }
 
-    protected static void writeIndex(ProgramWriter program, String file) throws RyftException {
-        wrapPrimitive(program, "rol_set_index_results_file(&output, \"" + file + "\")");
+    protected static void search(ProgramWriter program, String searchString, int width, String dataResults, String indexResults, String delimiter) throws RyftException {
+        program.append("rol_data_set_t rdsOutput = rol_ds_search_exact(rdsInput, \"" + dataResults + "\", \"" + checkSearchExpression(searchString) + "\", " + width + ", \"" + delimiter + "\", \"" + indexResults + "\", true, NULL);", 1);
     }
 
-    protected static void writeData(ProgramWriter program, String file) throws RyftException {
-        wrapPrimitive(program, "rol_set_data_results_file(&output, \"" + file + "\")");
-    }
-
-    protected static void search(ProgramWriter program, String searchString, int width, String delimiter) throws RyftException {
-        program.append("const char *strDelimiter = \"" + delimiter + "\";", 1);
-        wrapPrimitive(program, "rol_search_exact(&output, &input, \"" + checkSearchExpression(searchString) + "\", " + width + ", true" + ", strDelimiter)");
-    }
-
-    protected static void fuzzySearch(ProgramWriter program, String searchString, int width, int fuzziness, String delimiter) throws RyftException {
-        program.append("const char *strDelimiter = \"" + delimiter + "\";", 1);
-        wrapPrimitive(program, "rol_search_fuzzy(&output, &input, \"" + checkSearchExpression(searchString) + "\", " + width + ", " + fuzziness
-                + ", true" + ", strDelimiter)");
+    protected static void fuzzySearch(ProgramWriter program, String searchString, int width, int fuzziness, String dataResults, String indexResults, String delimiter) throws RyftException {
+        program.append("rol_data_set_t rdsOutput = rol_ds_search_fuzzy_hamming(rdsInput, \"" + dataResults + "\", \"" + checkSearchExpression(searchString) + "\", " + width + ", " + fuzziness + ", \"" + delimiter + "\", \"" + indexResults + "\", true, NULL);", 1);
     }
 
     protected static void sort(ProgramWriter program, String field, SortOrder order) throws RyftException {
-        wrapPrimitive(program, "rol_sort_" + (SortOrder.ASC == order ? "ascending" : "descending") + "(&output, &input, \"" + field + "\")");
     }
 
-    protected static void termFrequency(ProgramWriter program, TermFormat format, String field, String key) throws RyftException {
+    protected static void termFrequency(ProgramWriter program, TermFormat format, String dataResults, String field, String key) throws RyftException {
         switch (format) {
             case RAW:
-                wrapPrimitive(program, "rol_rawtext_based_term_frequency(&output, &input)");
+                program.append("rol_data_set_t rdsOutput = rol_ds_term_frequency_rawtext(rdsInput, \"" + dataResults + "\", true, NULL)", 1);
                 break;
             case RECORD:
-                wrapPrimitive(program, "rol_record_based_term_frequency(&output, &input, \"" + key + "\")");
+                program.append("rol_data_set_t rdsOutput = rol_ds_term_frequency_record(rdsInput, \"" + dataResults + "\", true, \"" + key + "\", NULL)", 1);
                 break;
             case FIELD:
-                wrapPrimitive(program, "rol_field_based_term_frequency(&output, &input, \"" + field + "\", \"" + key + "\")");
+                program.append("rol_data_set_t rdsOutput = rol_ds_term_frequency_record(rdsInput, \"" + dataResults + "\", true, \"" + key + "\", \"" + field + "\", NULL)", 1);
                 break;
             default:
                 throw new IllegalStateException("Unknown format " + format);
         }
     }
 
-    protected static void execute(ProgramWriter program, int nodes) throws RyftException {
-        wrapPrimitive(program, "rol_execute_algorithm(" + nodes + ", 0)");
+    protected static void checkError(ProgramWriter program) throws RyftException {
+        program.append("if (rol_ds_has_error_occurred(rdsOutput)) {", 1);
+        program.append("printf(\"" + ERROR_PREFIX + "%s:\\n\", rol_ds_get_error_string(rdsOutput));", 2);
+        program.append("}", 1);
     }
 
     protected static void statistics(ProgramWriter program, String type) throws RyftException {
@@ -126,24 +105,18 @@ public final class RyftPrimitives {
             stats.add(Statistics.NUMBER_OF_TERMS);
         }
         for (Statistics stat : stats) {
-            program.append(stat.type + ' ' + stat.variable + ';', 1);
-            program.append("rol_get_statistics(&output, \"" + stat.name + "\", &" + stat.variable + ");", 1);
-            program.append("printf(\"" + STATISTICS_PREFIX + stat.name + ": %\"" + stat.format + "\"\\n\", " + stat.variable + ");", 1);
+            program.append("long " + stat.variable + " = " + stat.call + ";", 1);
+            program.append("printf(\"" + STATISTICS_PREFIX + stat.name + ": %ld\\n\"" + ", " + stat.variable + ");", 1);
         }
     }
 
     protected static void closeProgram(ProgramWriter program) throws RyftException {
-        program.append("return ret_val;", 1);
+        program.append("rol_ds_delete(&rdsOutput);", 1);
+        program.append("rol_ds_delete(&rdsInput);", 1);
+        program.append("return 0;", 1);
         program.append("}");
     }
 
-    private static void wrapPrimitive(ProgramWriter program, String primitive) throws RyftException {
-        program.append("ret_val = " + primitive + ";", 1);
-        program.append("if (ret_val != 0) {", 1);
-        program.append("printf(\"" + ERROR_PREFIX + "%s:\\n\", rol_get_error_string());", 2);
-        program.append("return ret_val;", 2);
-        program.append("}", 1);
-    }
 
     private static String checkSearchExpression(String search) {
         if (search.contains(Query.RAW) || search.contains(Query.RECORD)) {

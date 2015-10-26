@@ -107,7 +107,6 @@ For a sort query:
 
 There are additional optional parameters:
 * output: specifies the name of the output file, one will be generated if not specified
-* writeIndex: true or false to indicate whether or not to generate the index file for search and fuzzy search queries
 * nodes: the number of nodes to use (2 by default)
 
 Example query for a search:

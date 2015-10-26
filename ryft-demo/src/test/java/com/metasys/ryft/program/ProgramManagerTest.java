@@ -46,7 +46,6 @@ public class ProgramManagerTest {
         query = new Query();
         query.setInput("inputFile1.txt,inputFile2.txt");
         query.setOutput("results.txt");
-        query.setWriteIndex(true);
         query.setSearchQuery("(RAW_TEXT CONTAINS \"something\")");
         query.setSearchWidth(20);
         query.setFuzzyQuery("(RAW_TEXT CONTAINS \"something\")");
@@ -114,7 +113,6 @@ public class ProgramManagerTest {
     @Test
     public void testGenerateSearchNoIndex() throws Exception {
         query.setType(Query.SEARCH);
-        query.setWriteIndex(false);
         pm.generate(query, "search_noindex");
         assertProgram("search_noindex");
     }

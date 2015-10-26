@@ -52,7 +52,6 @@ public class DemoPage extends WebPage implements IAjaxIndicatorAware {
     // settings
     private static final String INPUT = "input";
     private static final String OUTPUT = "output";
-    private static final String WRITE_INDEX = "writeIndex";
     private static final String NODES = "nodes";
     private static final String SETTINGS = "settings";
 
@@ -145,7 +144,6 @@ public class DemoPage extends WebPage implements IAjaxIndicatorAware {
         addDoc(INPUT);
 
         addTextField(OUTPUT);
-        addCheckBox(WRITE_INDEX);
         addDoc(OUTPUT);
 
         addTextField(NODES).getFormComponent().add(RangeValidator.range(1, 4));

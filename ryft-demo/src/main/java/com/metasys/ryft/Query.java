@@ -35,7 +35,6 @@ public class Query implements Serializable {
     private String type;
     private String input;
     private String output;
-    private boolean writeIndex;
     private Integer nodes;
 
     private String searchQuery;
@@ -147,14 +146,6 @@ public class Query implements Serializable {
     public void setOutput(String output) {
         this.output = output;
         outputIndex = 0;
-    }
-
-    public boolean isWriteIndex() {
-        return writeIndex;
-    }
-
-    public void setWriteIndex(boolean writeIndex) {
-        this.writeIndex = writeIndex;
     }
 
     public Integer getNodes() {
@@ -279,7 +270,7 @@ public class Query implements Serializable {
 
     @Override
     public String toString() {
-        return "Query [id=" + id + ", type=" + type + ", input=" + input + ", output=" + output + ", writeIndex=" + writeIndex + ", nodes=" + nodes
+        return "Query [id=" + id + ", type=" + type + ", input=" + input + ", output=" + output + ", nodes=" + nodes
                 + ", searchQuery=" + searchQuery + ", searchWidth=" + searchWidth + ", searchDelimiter=" + searchDelimiter + ", fuzzyQuery="
                 + fuzzyQuery + ", fuzzyWidth=" + fuzzyWidth + ", fuzziness=" + fuzziness + ", fuzzyDelimiter=" + fuzzyDelimiter + ", sortField="
                 + sortField + ", sortOrder=" + sortOrder + ", sortDescending=" + sortDescending + ", termFormat=" + termFormat + ", termField="
@@ -308,7 +299,6 @@ public class Query implements Serializable {
         result = prime * result + (termFormat == null ? 0 : termFormat.hashCode());
         result = prime * result + (termKey == null ? 0 : termKey.hashCode());
         result = prime * result + (type == null ? 0 : type.hashCode());
-        result = prime * result + (writeIndex ? 1231 : 1237);
         return result;
     }
 
@@ -436,9 +426,6 @@ public class Query implements Serializable {
                 return false;
             }
         } else if (!type.equals(other.type)) {
-            return false;
-        }
-        if (writeIndex != other.writeIndex) {
             return false;
         }
         return true;
