@@ -49,6 +49,7 @@ public final class RyftPrimitives {
     }
 
     protected static void initProgram(ProgramWriter program, int nodes) throws RyftException {
+        program.append("#include \"stdio.h\"").newLine();
         program.append("#include \"libryftone.h\"").newLine();
         program.append("int main(__attribute__ ((unused))int argc, __attribute__ ((unused))char* argv[]) {");
         program.append("rol_data_set_t rdsInput = rol_ds_create_with_nodes(" + nodes + ");", 1);
